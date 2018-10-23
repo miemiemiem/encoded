@@ -39,7 +39,7 @@ Feature: Search
 
         When I click the link to "?type=Experiment&status=released&assay_title=ChIP-seq"
         And I wait for the content to load
-        Then I should see at least 18 elements with the css selector "ul.nav.result-table > li"
+        Then I should see at least 7 elements with the css selector "ul.nav.result-table > li"
 
         When I click the link to "?type=Experiment&status=released&assay_title=ChIP-seq&assay_title=DNAme+array"
         And I wait for the content to load
