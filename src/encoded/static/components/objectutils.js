@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
 import url from 'url';
+import { svgIcon } from '../libs/svg-icons';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from '../libs/bootstrap/modal';
 import * as globals from './globals';
 
@@ -790,4 +791,59 @@ DocTypeTitle.defaultProps = {
 
 DocTypeTitle.contextTypes = {
     profilesTitles: PropTypes.object,
+};
+
+
+/**
+ * Display the search-result view controls.
+ */
+export const ViewControls = ({ views, css, hrefProcessor }) => {
+    if (views.length > 0) {
+        return (
+            <div className={`btn-attached${css ? ` ${css}` : ''}`}>
+                {views.map((view) => {
+                    // Checks for the function every iteration, but with so few buttons I don't
+                    // expect performance issues.
+                    const href = hrefProcessor ? hrefProcessor(view.href) : view.href;
+                    return <a href={href} key={view.icon} className="btn btn-info btn-sm btn-svgicon" title={view.title}>{svgIcon(globals.viewToSvg[view.icon])}</a>;
+                })}
+            </div>
+        );
+    }
+    return null;
+};
+
+ViewControls.propTypes = {
+    /** Views from a search-result object */
+    views: PropTypes.array.isRequired,
+    /** CSS to add to the wrapper <div> */
+    css: PropTypes.string,
+    /** Callback to modify hrefs for each button */
+    hrefProcessor: PropTypes.func,
+};
+
+ViewControls.defaultProps = {
+    css: '',
+    hrefProcessor: null,
+};
+
+
+/**
+ * Display the "Clear filters" link.
+ */
+export const ClearFilters = ({ searchUri, displayTest }) => (
+    <div className="clear-filters-control">
+        {displayTest ? <div><a href={searchUri}>Clear Filters <i className="icon icon-times-circle" /></a></div> : null}
+    </div>
+);
+
+ClearFilters.propTypes = {
+    /** URI for the Clear Filters link */
+    searchUri: PropTypes.string.isRequired,
+    /** True to display the link */
+    displayTest: PropTypes.bool,
+};
+
+ClearFilters.defaultProps = {
+    displayTest: true,
 };
