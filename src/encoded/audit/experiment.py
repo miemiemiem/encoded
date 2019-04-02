@@ -498,7 +498,8 @@ def audit_experiment_standards_dispatcher(value, system, files_structure):
                                             'CRISPR genome editing followed by RNA-seq',
                                             'single cell isolation followed by RNA-seq',
                                             'whole-genome shotgun bisulfite sequencing',
-                                            'genetic modification followed by DNase-seq']:
+                                            'genetic modification followed by DNase-seq',
+                                            'ISO-seq', 'icSHAPE']:
         return
     if not value.get('original_files'):
         return
@@ -541,7 +542,8 @@ def audit_experiment_standards_dispatcher(value, system, files_structure):
                                     'siRNA knockdown followed by RNA-seq',
                                     'CRISPRi followed by RNA-seq',
                                     'CRISPR genome editing followed by RNA-seq',
-                                    'single cell isolation followed by RNA-seq']:
+                                    'single cell isolation followed by RNA-seq',
+                                    'icSHAPE', 'ISO-seq']:
         yield from check_experiment_rna_seq_standards(
             value,
             files_structure,
@@ -764,7 +766,8 @@ def check_experiment_rna_seq_standards(value,
         ['RNA-seq of long RNAs (paired-end, stranded)',
          'RNA-seq of long RNAs (single-end, unstranded)',
          'Small RNA-seq single-end pipeline',
-         'RAMPAGE (paired-end, stranded)'])
+         'RAMPAGE (paired-end, stranded)',
+         'Long read RNA-seq pipeline'])
     if pipeline_title is False:
         return
 
@@ -772,7 +775,8 @@ def check_experiment_rna_seq_standards(value,
         'RNA-seq of long RNAs (paired-end, stranded)': ' /data-standards/rna-seq/long-rnas/ ',
         'RNA-seq of long RNAs (single-end, unstranded)': ' /data-standards/rna-seq/long-rnas/ ',
         'Small RNA-seq single-end pipeline': ' /data-standards/rna-seq/small-rnas/ ',
-        'RAMPAGE (paired-end, stranded)': ' /data-standards/rampage/  '
+        'RAMPAGE (paired-end, stranded)': ' /data-standards/rampage/  ',
+        'Long read RNA-seq pipeline': ' /data-standards/long-read-rna-pipeline/ '
     }
 
     for f in fastq_files:
@@ -850,6 +854,16 @@ def check_experiment_rna_seq_standards(value,
             medium_limit,
             lower_limit,
             standards_links[pipeline_title])
+    elif pipeline_title == 'Long read RNA-seq pipeline':
+        yield from check_experiment_long_read_rna_standards(
+            value,
+            alignment_files,
+            pipeline_title,
+            gene_quantifications,
+            desired_assembly,
+            desired_annotation,
+            standards_links[pipeline_title]
+        )
     return
 
 
@@ -1146,6 +1160,75 @@ def check_experiment_cage_rampage_standards(experiment,
     yield from check_spearman(
         mad_metrics, experiment['replication_type'],
         0.9, 0.8, 'RAMPAGE (paired-end, stranded)')
+    return
+
+
+def check_experiment_long_read_rna_standards(
+    experiment,
+    some_file,
+    pipeline_title,
+    desired_assembly,
+    desired_annotation,
+    standards_link
+):
+    upper_limit_flnc = 6e5
+    lower_limit_flnc = 4e5
+    upper_limit_mapping_rate = 90
+    lower_limit_mapping_rate = 60
+    upper_limit_spearman = 0.8
+    lower_limit_spearman = 0.6
+    upper_limit_genes_detected = 8000
+    lower_limit_genes_detected = 4000
+    lower_limit_percent_genes_in_short_read = 0.9
+
+    qc_metric = some_file['quality_metrics'][0]
+    for replicate in qc_metric['replicates_sequencing_depth']:
+        # Check the flnc read counts of the replicates
+        rep_flnc = replicate['full_length_non_chimeric_read_count']
+        if rep_flnc < upper_limit_flnc:
+            level = 'WARNING'
+            standards_descriptor = 'recommendations'
+            if rep_flnc < lower_limit_flnc:
+                level = 'NOT_COMPLIANT'
+                standards_descriptor = 'requirements'
+            detail = (
+                'Replicate {} has a full-length non-chimeric (FLNC) read count of {}, which is '
+                'below ENCODE {}. According to ENCODE standards, a FLNC read count in a '
+                'replicate of > 400,000 is required, while a FLNC read count > 600,000 is '
+                'recommended.'
+            ).format(
+                replicate['replicate'],
+                rep_flnc,
+                standards_descriptor,
+            )
+            yield AuditFailure('insufficient sequencing depth', detail, level=level)
+    for replicate in qc_metric['replicates_genes_detected']:
+        # Check the number of genes detected
+        rep_genes_detected = replicate['genes_detected']
+        percent_genes_in_short_read = replicate['percent_genes_in_short_read']
+        if rep_genes_detected < upper_limit_genes_detected:
+            level = 'WARNING'
+            if (
+                rep_genes_detected < lower_limit_genes_detected and
+                percent_genes_in_short_read < lower_limit_percent_genes_in_short_read
+            ):
+                level = 'NOT_COMPLIANT'
+            detail = (
+                'Replicate {} has {} detected GENCODE genes and {} of its genes detected at > 5 '
+                'transcripts per million (TPM) in an equivalent short read RNA-seq experiment, '
+                'which is below ENCODE {}. According to ENCODE standards, a number of GENCODE '
+                'genes detected in a replicate of > 400,000 is required, and > 800,000 is '
+                'recommended. In addition, a percentage of genes detected at > 5 transcripts per'
+                'million (TPM) in an equivalent short read RNA-seq experiment of > 90% is required.'
+            ).format(
+                replicate['replicate'],
+                rep_genes_detected,
+                percent_genes_in_short_read * 100,
+                standards_descriptor,
+            )
+            yield AuditFailure('insufficient genes detected', detail, level=level)
+    for replicate in qc_metric['replicates_correlation']:
+        # Check the spearman correlation between the pairs of replicates
     return
 
 
@@ -3175,6 +3258,12 @@ def audit_experiment_nih_institutional_certification(value, system, excluded_typ
                   ' certification required for human data'.format(value['@id'], b))
         yield AuditFailure('missing nih_institutional_certification', detail, level='ERROR')
 
+
+def audit_experiment_long_read_rna_standards(value, system):
+    if value['status'] in ['deleted', 'replaced', 'revoked']:
+        return
+    if value['assay_term_name'] not in ['ISO-seq', 'icSHAPE']:
+        return
 
 
 #######################
