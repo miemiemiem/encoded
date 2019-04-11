@@ -27,6 +27,7 @@ require('./matrix');
 require('./target');
 require('./publication');
 require('./pipeline');
+require('./quality_metric');
 require('./software');
 require('./news');
 require('./testing');

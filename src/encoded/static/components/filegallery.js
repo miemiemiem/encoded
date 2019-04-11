@@ -1132,6 +1132,7 @@ function qcAbbr(qc) {
         IDRQualityMetric: 'ID',
         IdrSummaryQualityMetric: 'IS',
         MadQualityMetric: 'MD',
+        MicroRnaQualityMetric: 'MR',
         SamtoolsFlagstatsQualityMetric: 'SF',
         SamtoolsStatsQualityMetric: 'SS',
         StarQualityMetric: 'SR',
