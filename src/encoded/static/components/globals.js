@@ -24,6 +24,9 @@ export const graphDetail = new Registry();
 // Search facet view
 export const facetView = new Registry();
 
+// QC metric view
+export const qcMetricViews = new Registry();
+
 // Document panel components
 // +---------------------------------------+
 // | header                                |

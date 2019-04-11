@@ -87,6 +87,9 @@ export function qcModalContent(qc, file, qcSchema, genericQCSchema) {
         qcName = qcName[0].toUpperCase() + qcName.substring(1);
     }
 
+    // Get the view component for the given QC metric object.
+    const QCDataDisplayView = globals.qcMetricViews.lookup(qc);
+
     const header = (
         <div className="details-view-info">
             <h4>{qcName} of {file.title}</h4>
@@ -97,7 +100,7 @@ export function qcModalContent(qc, file, qcSchema, genericQCSchema) {
         <div>
             <div className="row">
                 <div className="col-md-4 col-sm-6 col-xs-12">
-                    <QCDataDisplay qcMetric={qc} qcSchema={qcSchema} genericQCSchema={genericQCSchema} />
+                    <QCDataDisplayView qcMetric={qc} qcSchema={qcSchema} genericQCSchema={genericQCSchema} />
                 </div>
 
                 {(qcPanels && qcPanels.length) || qc.attachment ?
@@ -210,7 +213,7 @@ ExpandTrigger.propTypes = {
 
 
 // Display the data for a QC object as a <dl>
-const QCDataDisplay = (props) => {
+const QCDataDisplayDefault = (props) => {
     const { qcMetric, qcSchema, genericQCSchema } = props;
 
     // Make a list of QC metric object keys to display. Filter to only display strings and
@@ -239,15 +242,44 @@ const QCDataDisplay = (props) => {
     );
 };
 
-QCDataDisplay.propTypes = {
+QCDataDisplayDefault.propTypes = {
     qcMetric: PropTypes.object, // QC metric object whose data we're displaying here
     qcSchema: PropTypes.object.isRequired, // Schema that applies to the given qcMetric object
     genericQCSchema: PropTypes.object.isRequired, // Generic quality metric schema
 };
 
-QCDataDisplay.defaultProps = {
+QCDataDisplayDefault.defaultProps = {
     qcMetric: null,
 };
+
+globals.qcMetricViews.register(QCDataDisplayDefault, 'QualityMetric');
+
+
+const QCDataDisplayMicroRnaQualityMetric = ({ qcMetric }) => {
+    return (
+        <dl className="key-value">
+            <div data-test="expressed_mirnas">
+                <dt className="sentence-case">Expressed miRNAs</dt>
+                <dd>{qcMetric.miRNA_expression.map(expression => expression.expressed_mirnas || 'Unknown').join(', ')}</dd>
+            </div>
+            <div data-test="aligned_reads">
+                <dt className="sentence-case">Aligned reads</dt>
+                <dd>{qcMetric.miRNA_alignments.map(alignments => alignments.aligned_reads || 'Unknown').join(', ')}</dd>
+            </div>
+            <div data-test="spearman_correlation">
+                <dt className="sentence-case">Spearman correlation</dt>
+                <dd>{qcMetric.replicates_correlation.map(expression => expression.spearman_correlation || 'Unknown').join(', ')}</dd>
+            </div>
+        </dl>
+    );
+};
+
+QCDataDisplayMicroRnaQualityMetric.propTypes = {
+    /** MicroRnaQualityMetric QC metric object to display */
+    qcMetric: PropTypes.object.isRequired,
+};
+
+globals.qcMetricViews.register(QCDataDisplayMicroRnaQualityMetric, 'MicroRnaQualityMetric');
 
 
 // Render a panel for an individual quality metric object.
@@ -286,6 +318,9 @@ class QCIndividualPanel extends React.Component {
         // Calculate the classes for the individual panel.
         const panelClasses = `qc-individual-panel${this.state.expanded ? ' expanded' : ''}`;
 
+        // Get the view component for the given QC metric object.
+        const QCDataDisplayView = globals.qcMetricViews.lookup(qcMetric);
+
         // Got a matching schema, so render it with full titles.
         return (
             <div className="qc-individual-panel__wrapper">
@@ -298,7 +333,7 @@ class QCIndividualPanel extends React.Component {
                     </PanelHeading>
                     <PanelBody>
                         <div ref={(comp) => { this.qcBody = comp; }}>
-                            <QCDataDisplay qcMetric={qcMetric} qcSchema={qcSchema} genericQCSchema={genericQCSchema} />
+                            <QCDataDisplayView qcMetric={qcMetric} qcSchema={qcSchema} genericQCSchema={genericQCSchema} />
                         </div>
                     </PanelBody>
                     {this.state.triggerVisible ?
