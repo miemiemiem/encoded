@@ -255,24 +255,28 @@ QCDataDisplayDefault.defaultProps = {
 globals.qcMetricViews.register(QCDataDisplayDefault, 'QualityMetric');
 
 
-const QCDataDisplayMicroRnaQualityMetric = ({ qcMetric }) => {
-    return (
-        <dl className="key-value">
+const QCDataDisplayMicroRnaQualityMetric = ({ qcMetric }) => (
+    <dl className="key-value">
+        {qcMetric.miRNA_expression.length > 0 ?
             <div data-test="expressed_mirnas">
                 <dt className="sentence-case">Expressed miRNAs</dt>
                 <dd>{qcMetric.miRNA_expression.map(expression => expression.expressed_mirnas || 'Unknown').join(', ')}</dd>
             </div>
+        : null}
+        {qcMetric.miRNA_alignments.length > 0 ?
             <div data-test="aligned_reads">
                 <dt className="sentence-case">Aligned reads</dt>
                 <dd>{qcMetric.miRNA_alignments.map(alignments => alignments.aligned_reads || 'Unknown').join(', ')}</dd>
             </div>
+        : null}
+        {qcMetric.replicates_correlation && qcMetric.replicates_correlation.length > 0 ?
             <div data-test="spearman_correlation">
                 <dt className="sentence-case">Spearman correlation</dt>
-                <dd>{qcMetric.replicates_correlation.map(expression => expression.spearman_correlation || 'Unknown').join(', ')}</dd>
+                <dd>{qcMetric.replicates_correlation.map(correlation => correlation.spearman_correlation || 'Unknown').join(', ')}</dd>
             </div>
-        </dl>
-    );
-};
+        : null}
+    </dl>
+);
 
 QCDataDisplayMicroRnaQualityMetric.propTypes = {
     /** MicroRnaQualityMetric QC metric object to display */
@@ -280,6 +284,131 @@ QCDataDisplayMicroRnaQualityMetric.propTypes = {
 };
 
 globals.qcMetricViews.register(QCDataDisplayMicroRnaQualityMetric, 'MicroRnaQualityMetric');
+
+
+const QCDataDisplayLongReadRnaQualityMetric = ({ qcMetric }) => (
+    <dl className="key-value">
+        <div data-test="mapping_rate">
+            <dt className="sentence-case">Mapping rate</dt>
+            <dd>{qcMetric.replicates_mapping_rate.map(rate => rate.mapping_rate).join(', ')}</dd>
+        </div>
+        <div data-test="genes_detected">
+            <dt className="sentence-case">Genes detected</dt>
+            <dd>{qcMetric.replicates_genes_detected.map(genes => genes.genes_detected).join(', ')}</dd>
+        </div>
+        <div data-test="read_count">
+            <dt className="sentence-case">Read count</dt>
+            <dd>{qcMetric.replicates_sequencing_depth.map(depth => depth.full_length_non_chimeric_read_count).join(', ')}</dd>
+        </div>
+        {qcMetric.replicates_correlation && qcMetric.replicates_correlation.length > 0 ?
+            <div data-test="spearman_correlation">
+                <dt className="sentence-case">Spearman correlation</dt>
+                <dd>{qcMetric.replicates_correlation.map(expression => expression.spearman_correlation).join(', ')}</dd>
+            </div>
+        : null}
+    </dl>
+);
+
+QCDataDisplayLongReadRnaQualityMetric.propTypes = {
+    /** LongReadRnaQualityMetric QC metric object to display */
+    qcMetric: PropTypes.object.isRequired,
+};
+
+globals.qcMetricViews.register(QCDataDisplayLongReadRnaQualityMetric, 'LongReadRnaQualityMetric');
+
+
+const QCDataDisplayAtacQualityMetric = ({ qcMetric }) => {
+    let idrStatsRender = null;
+    if (qcMetric.IDR_stats && qcMetric.IDR_stats.length > 0) {
+        const selfConsistencyRatios = qcMetric.IDR_stats.map(stats => stats.self_consistency_ratio).join(', ');
+        const rescueRatios = qcMetric.IDR_stats.map(stats => stats.rescue_ratio).join(', ');
+        idrStatsRender = [
+            <div key="self_consistency_ratio" data-test="self_consistency_ratio">
+                <dt className="sentence-case">Self consistency ratio</dt>
+                <dd>{selfConsistencyRatios}</dd>
+            </div>,
+            <div key="rescue_ratio" data-test="rescue_ratio">
+                <dt className="sentence-case">Rescue ratio</dt>
+                <dd>{rescueRatios}</dd>
+            </div>,
+        ];
+    }
+
+    let replicateAtacQcRender = null;
+    if (qcMetric.replicate_atac_qc && qcMetric.replicate_atac_qc.length > 0) {
+        const pBC1s = qcMetric.replicate_atac_qc.map(reps => reps.PBC1).join(', ');
+        const pBC2s = qcMetric.replicate_atac_qc.map(reps => reps.PBC2).join(', ');
+        const nRFs = qcMetric.replicate_atac_qc.map(reps => reps.NRF).join(', ');
+        const tssEnrichments = qcMetric.replicate_atac_qc.map(reps => reps.TSS_enrichment).join(', ');
+        const nucleosomeFreeRegions = qcMetric.replicate_atac_qc.map(reps => (reps.nucleosome_free_region ? 'Yes' : 'No')).join(', ');
+        const mononucleosomePeakPresences = qcMetric.replicate_atac_qc.map(reps => (reps.mononucleosome_peak_presence ? 'Yes' : 'No')).join(', ');
+        const alignedFilteredReads = qcMetric.replicate_atac_qc.map(reps => reps.aligned_filtered_reads).join(', ');
+        const frips = qcMetric.replicate_atac_qc.map(reps => reps.frip).join(', ');
+        const idrPeaks = qcMetric.replicate_atac_qc.map(reps => reps.IDR_peaks).join(', ');
+        const overlapPeaks = qcMetric.replicate_atac_qc.map(reps => reps.overlap_peaks).join(', ');
+        const alignmentRates = qcMetric.replicate_atac_qc.map(reps => reps.alignment_rate).join(', ');
+        replicateAtacQcRender = [
+            <div key="PBC1" data-test="PBC1">
+                <dt className="sentence-case">PCR bottlenecking coefficient 1</dt>
+                <dd>{pBC1s}</dd>
+            </div>,
+            <div key="PBC2" data-test="PBC2">
+                <dt className="sentence-case">PCR bottlenecking coefficient 2</dt>
+                <dd>{pBC2s}</dd>
+            </div>,
+            <div key="NRF" data-test="NRF">
+                <dt className="sentence-case">Non-redundant fraction</dt>
+                <dd>{nRFs}</dd>
+            </div>,
+            <div key="TSS_enrichment" data-test="TSS_enrichment">
+                <dt className="sentence-case">TSS enrichment</dt>
+                <dd>{tssEnrichments}</dd>
+            </div>,
+            <div key="nucleosome_free_region" data-test="nucleosome_free_region">
+                <dt className="sentence-case">Nucleosome free region</dt>
+                <dd>{nucleosomeFreeRegions}</dd>
+            </div>,
+            <div key="mononucleosome_peak_presence" data-test="mononucleosome_peak_presence">
+                <dt className="sentence-case">Presence of mononucleosome peak in the fragment length distribution</dt>
+                <dd>{mononucleosomePeakPresences}</dd>
+            </div>,
+            <div key="aligned_filtered_reads" data-test="aligned_filtered_reads">
+                <dt className="sentence-case">Aligned filtered fragments</dt>
+                <dd>{alignedFilteredReads}</dd>
+            </div>,
+            <div key="frip" data-test="frip">
+                <dt className="sentence-case">FRiP</dt>
+                <dd>{frips}</dd>
+            </div>,
+            <div key="IDR_peaks" data-test="IDR_peaks">
+                <dt className="sentence-case">IDR peaks</dt>
+                <dd>{idrPeaks}</dd>
+            </div>,
+            <div key="overlap_peaks" data-test="overlap_peaks">
+                <dt className="sentence-case">Overlap peaks</dt>
+                <dd>{overlapPeaks}</dd>
+            </div>,
+            <div key="alignment_rate" data-test="alignment_rate">
+                <dt className="sentence-case">Alignment rate</dt>
+                <dd>{alignmentRates}</dd>
+            </div>,
+        ];
+    }
+
+    return (
+        <dl className="key-value">
+            {idrStatsRender}
+            {replicateAtacQcRender}
+        </dl>
+    );
+};
+
+QCDataDisplayAtacQualityMetric.propTypes = {
+    /** AtacQualityMetric QC metric object to display */
+    qcMetric: PropTypes.object.isRequired,
+};
+
+globals.qcMetricViews.register(QCDataDisplayAtacQualityMetric, 'AtacQualityMetric');
 
 
 // Render a panel for an individual quality metric object.
