@@ -13,16 +13,13 @@
 .valis-browser {
     width: 100%;
     min-height: 200px;
-    // margin-top: 30px;
 }
 
 .valis-genome-visualizer {
     .react-object-container {
-        // border: 2px solid #333333;
         div {
             background-color: white !important;
             color: #333333;
-            // border: 2px solid #333333;
         }
     }
 }
@@ -40,6 +37,17 @@
 
 .hpgv_panel {
     color: #737d94;
+}
+
+.hpgv_track-sequence {
+    --nucleobase-a: #d06fa9;
+    --nucleobase-t: #e89188;
+    --nucleobase-g: #4bd897;
+    --nucleobase-c: #44a4dc;
+    --gc-banding-low: #882a51;
+    --gc-banding-high: #1bffff;
+    --text-color: rgba(255, 255, 255, 0.7);
+    --text-additive-blending: 1.0; /* set to 0.0 for dark text colors */
 }
 
 .hpgv_track {
@@ -62,15 +70,6 @@
     color: black;
 }
 
-// .hpgv_panel-header {
-//     display: none;
-// }
-
 .hpgv_track-sequence {
     color: black;
-}
-
-.hpgv {
-    // margin-top: -50px;
-    // z-index: -999;
 }
