@@ -7,6 +7,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from '../libs/bootstrap/mo
 import { collapseIcon } from '../libs/svg-icons';
 import { auditDecor, auditsDisplayed, AuditIcon } from './audit';
 import { FetchedData, Param } from './fetched';
+import GenomeBrowser from './genome_browser';
 import * as globals from './globals';
 import { Graph, JsonGraph, GraphException } from './graph';
 import { requestFiles, DownloadableAccession } from './objectutils';
@@ -2079,10 +2080,13 @@ class FileGalleryRendererComponent extends React.Component {
                 {!hideGraph ?
                     <TabPanel
                         tabPanelCss="file-gallery-tab-bar"
-                        tabs={{ graph: 'Association graph', tables: 'File details' }}
+                        tabs={{ browser: 'Genome browser', graph: 'Association graph', tables: 'File details' }}
                         decoration={<InclusionSelector inclusionOn={this.state.inclusionOn} handleInclusionChange={this.handleInclusionChange} />}
                         decorationClasses="file-gallery__inclusion-selector"
                     >
+                        <TabPanelPane key="browser">
+                            <GenomeBrowser files={this.state.selectedBrowserFiles} />
+                        </TabPanelPane>
                         <TabPanelPane key="graph">
                             <FileGraph
                                 dataset={context}

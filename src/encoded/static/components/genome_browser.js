@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
 const maxFilesBrowsed = 40; // Maximum number of files to browse
 const domainName = 'https://www.encodeproject.org';
 const dummyFiles = [
@@ -23,24 +22,24 @@ const dummyFiles = [
         accession: 'ENCFF541XFO',
         href: '/files/ENCFF541XFO/@@download/ENCFF541XFO.bigWig',
     },
-    // {
-    //     file_format: 'bigBed',
-    //     output_type: 'transcription start sites',
-    //     accession: 'ENCFF517WSY',
-    //     href: '/files/ENCFF517WSY/@@download/ENCFF517WSY.bigBed',
-    // },
-    // {
-    //     file_format: 'bigBed',
-    //     output_type: 'peaks',
-    //     accession: 'ENCFF026DAN',
-    //     href: '/files/ENCFF026DAN/@@download/ENCFF026DAN.bigBed',
-    // },
-    // {
-    //     file_format: 'bigBed',
-    //     output_type: 'peaks',
-    //     accession: 'ENCFF847CBY',
-    //     href: '/files/ENCFF847CBY/@@download/ENCFF847CBY.bigBed',
-    // },
+    {
+        file_format: 'bigBed',
+        output_type: 'transcription start sites',
+        accession: 'ENCFF517WSY',
+        href: '/files/ENCFF517WSY/@@download/ENCFF517WSY.bigBed',
+    },
+    {
+        file_format: 'bigBed',
+        output_type: 'peaks',
+        accession: 'ENCFF026DAN',
+        href: '/files/ENCFF026DAN/@@download/ENCFF026DAN.bigBed',
+    },
+    {
+        file_format: 'bigBed',
+        output_type: 'peaks',
+        accession: 'ENCFF847CBY',
+        href: '/files/ENCFF847CBY/@@download/ENCFF847CBY.bigBed',
+    },
 ];
 
 
@@ -373,89 +372,71 @@ function rAssemblyToSources(assembly, region) {
 class GenomeBrowser extends React.Component {
     constructor(props, context) {
         super(props, context);
-        
+
         this.state = {
             width: 592,
             height: 1000,
             trackList: [],
         };
-        
+
         this.drawTracks = this.drawTracks.bind(this);
         this.drawTracksResized = this.drawTracksResized.bind(this);
+    }
 
-    }
-    
-    drawTracks(container) {
-        let visualizer = new GenomeVisualizer({tracks: this.state.trackList});
-        
-        console.log(this.state.trackList);
-        visualizer.render({
-            width: this.state.width,
-            height: this.state.height
-        }, container);
-    }
-    
     drawTracksResized() {
         console.log("resize");
-        
+
         this.setState({
             width: this.chartdisplay.clientWidth,
             height: this.chartdisplay.clientHeight
         });
-        if (this.chartdisplay){
+        if (this.chartdisplay) {
             const container = this.chartdisplay;
             this.drawTracks(container);
         }
     }
-    
-    componentDidMount(){
-        
-        const { assembly, region, limitFiles } = this.props;
-        // console.log('DidMount ASSEMBLY: %s', assembly);
+
+    componentDidMount() {
+        // const { assembly, region, limitFiles } = this.props;
 
         // Probably not worth a define in globals.js for visualizable types and statuses.
         // Extract only bigWig and bigBed files from the list:
-        let files = this.props.files.filter(file => file.file_format === 'bigWig' || file.file_format === 'bigBed');
-        files = files.filter(file => ['released', 'in progress', 'archived'].indexOf(file.status) > -1);
+        // let files = this.props.files.filter(file => file.file_format === 'bigWig' || file.file_format === 'bigBed');
+        // files = files.filter(file => ['released', 'in progress', 'archived'].indexOf(file.status) > -1);
 
-        console.log("is this a variable that we have");
-        console.log(maxFilesBrowsed);
-        console.log(limitFiles);
-        
         let domain = `${window.location.protocol}//${window.location.hostname}`;
+        let files = [];
         if (domain.includes('localhost')) {
             domain = domainName;
             // Make some fake file objects from "test" just to give the genome browser something to
             // chew on if we're running locally.
             files = dummyFiles;
         } else {
-            files = limitFiles ? files.slice(0, maxFilesBrowsed - 1) : files;
+            // files = limitFiles ? files.slice(0, maxFilesBrowsed - 1) : files;
         }
-        
+
         // let tracks = files.map(file => {
         //     return domain+file.href;
         // });
-        
-        let tracks = files.map(file => {
+
+        const tracks = files.map((file) => {
             console.log(file);
-            if (file.file_format === "bigWig"){
-                let trackObj = {};
-                trackObj['name'] = file.accession;
-                trackObj['type'] = 'signal';
-                trackObj['path'] = domain+file.href;
-                trackObj['heightPx'] = 50;
-                return trackObj;
-            } else {
-                let trackObj = {};
-                trackObj['name'] = file.accession;
-                trackObj['type'] = 'annotation';
-                trackObj['compact'] = true;
-                trackObj['path'] = domain+file.href;
-                trackObj['heightPx'] = 50;
+            if (file.file_format === 'bigWig') {
+                const trackObj = {};
+                trackObj.name = file.accession;
+                trackObj.type = 'signal';
+                trackObj.path = domain+file.href;
+                trackObj.heightPx = 50;
                 return trackObj;
             }
+            const trackObj = {};
+            trackObj.name = file.accession;
+            trackObj.type = 'annotation';
+            trackObj.compact = true;
+            trackObj.path = domain+file.href;
+            trackObj.heightPx = 50;
+            return trackObj;
         });
-        
         // let tracks = [
         //     {
         //         name: 'DNA',
@@ -475,12 +456,9 @@ class GenomeBrowser extends React.Component {
         //         heightPx: 150,
         //     },
         // ]
-        
         console.log(tracks);
-            
         this.setState({trackList: tracks}, function () {
             if (this.chartdisplay) {
-                
                 this.setState({
                     width: this.chartdisplay.clientWidth,
                 }, function(){
@@ -491,6 +469,15 @@ class GenomeBrowser extends React.Component {
             }
         });
 
+    }
+    
+    drawTracks(container) {
+        const visualizer = new GenomeVisualizer({tracks: this.state.trackList});
+        console.log(this.state.trackList);
+        visualizer.render({
+            width: this.state.width,
+            height: this.state.height
+        }, container);
     }
 
     render() {
