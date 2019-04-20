@@ -48,7 +48,7 @@ class GenomeBrowser extends React.Component {
         this.state = {
             width: 592,
             height: 1000,
-            trackList: [],
+            // trackList: [],
         };
 
         this.drawTracks = this.drawTracks.bind(this);
@@ -93,7 +93,7 @@ class GenomeBrowser extends React.Component {
             trackObj.heightPx = 50;
             return trackObj;
         });
-        this.setState({trackList: tracks}, function () {
+        this.setState({ trackList: tracks }, function () {
             if (this.chartdisplay) {
                 this.setState({
                     width: this.chartdisplay.clientWidth,
@@ -101,10 +101,9 @@ class GenomeBrowser extends React.Component {
                     this.drawTracks(this.chartdisplay);
                     window.addEventListener("resize", this.drawTracksResized);
                 });
-                
+        
             }
         });
-
     }
 
     drawTracksResized() {
@@ -136,13 +135,14 @@ class GenomeBrowser extends React.Component {
 }
 
 GenomeBrowser.propTypes = {
+    // trackList: PropTypes.array.isRequired,
     files: PropTypes.array.isRequired,
 };
 
-GenomeBrowser.defaultProps = {
-    height: 0,
-    width: 0,
-    trackList: [],
-};
+// GenomeBrowser.defaultProps = {
+// height: 0,
+// width: 0,
+// trackList: [],
+// };
 
 export default GenomeBrowser;
