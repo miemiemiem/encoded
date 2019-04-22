@@ -251,7 +251,7 @@ slim_shims = {
 }
 
 preferred_name = {
-    "OBI:0000626": "WGS",
+    "OBI:0002117": "WGS",
     "OBI:0001247": "genotyping HTS",
     "OBI:0001332": "DNAme array",
     "OBI:0001335": "microRNA counts",
@@ -359,7 +359,7 @@ ntr_assays = {
         "name": "single cell isolation followed by RNA-seq",
         "objectives": [],
         "organs": [],
-        "preferred_name": "single cell RNA-seq",
+        "preferred_name": "scRNA-seq",
         "slims": [],
         "synonyms": [],
         "systems": [],
@@ -372,7 +372,7 @@ ntr_assays = {
         "name": "genetic modification followed by DNase-seq",
         "objectives": [],
         "organs": [],
-        "preferred_name": "genetic modification DNase-seq",
+        "preferred_name": "GM DNase-seq",
         "slims": [],
         "synonyms": [],
         "systems": [],
