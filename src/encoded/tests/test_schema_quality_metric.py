@@ -21,3 +21,18 @@ def test_tarball_attachment(testapp, generic_quality_metric):
     # Make sure *.tar.gz and *.tgz files are accepted by the attachment property
     res = testapp.post_json('/generic_quality_metric', generic_quality_metric, expect_errors=False)
     assert res.status_code == 201
+
+@pytest.fixture
+def atac_filter_quality_metric(analysis_step_run, file, award, lab):
+    return {
+        'award': award['uuid'],
+        'lab': lab['uuid'],
+        'name': 'ATAC QC',
+        'step_run': analysis_step_run['uuid'],
+        
+    }
+
+def test_atac_filter_quality_metric_success(testapp, atac_filter_quality_metric, file):
+    testapp.post_json('/atac_filter_quality_metric', atac_filter_quality_metric, status=422)
+    atac_filter_quality_metric.update({'quality_metric_of': [file['uuid']]})
+    testapp.post_json('/atac_filter_quality_metric', atac_filter_quality_metric, status=201)
