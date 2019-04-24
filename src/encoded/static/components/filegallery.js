@@ -1783,8 +1783,6 @@ InclusionSelector.propTypes = {
 // Display facets for files
 const FileFacet = (props) => {
     const { facetObject, facetTitle } = props;
-    // This needs to be fixed
-    console.log(facetObject);
     let objSum = 0;
     Object.keys(facetObject).forEach((key) => {
         objSum += facetObject[key];
@@ -2160,13 +2158,13 @@ class FileGalleryRendererComponent extends React.Component {
 
                     {!hideGraph ?
                         <TabPanel
-                            tabPanelCss={`file-gallery-tab-bar ${this.state.facetsOpen ? 'expanded' : ''}`}
+                            tabPanelCss={`file-gallery-tab-bar ${this.state.facetsOpen ? '' : 'expanded'}`}
                             tabs={{ browser: 'Genome browser', graph: 'Association graph', tables: 'File details' }}
                             decoration={<InclusionSelector inclusionOn={this.state.inclusionOn} handleInclusionChange={this.handleInclusionChange} />}
                             decorationClasses="file-gallery__inclusion-selector"
                         >
                             <TabPanelPane key="browser">
-                                <GenomeBrowser files={this.state.files} />
+                                <GenomeBrowser files={this.state.files} expanded={this.state.facetsOpen} />
                             </TabPanelPane>
                             <TabPanelPane key="graph">
                                 <FileGraph

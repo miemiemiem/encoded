@@ -317,17 +317,7 @@ class GenomeBrowser extends React.Component {
             return trackObj;
         });
 
-        // Add Gencode annotation track
-        // tracks.push({
-        //     name: 'Gencode',
-        //     type: 'annotation',
-        //     compact: true,
-        //     path: './static/components/test-emma/gencode.gff3',
-        //     heightPx: 50,
-        // });
-
         this.setState({ trackList: tracks }, () => {
-            console.log('setting state and drawing tracks');
             if (this.chartdisplay) {
                 this.setState({
                     width: this.chartdisplay.clientWidth,
@@ -336,6 +326,13 @@ class GenomeBrowser extends React.Component {
                 });
             }
         });
+    }
+
+    componentDidUpdate(prevProps) {
+        // If the parent container changed size, we need to update the browser width
+        if (this.props.expanded !== prevProps.expanded) {
+            setTimeout(this.drawTracksResized, 1000);
+        }
     }
 
     drawTracksResized() {
@@ -376,6 +373,7 @@ class GenomeBrowser extends React.Component {
 
 GenomeBrowser.propTypes = {
     files: PropTypes.array.isRequired,
+    expanded: PropTypes.bool.isRequired,
 };
 
 export default GenomeBrowser;
