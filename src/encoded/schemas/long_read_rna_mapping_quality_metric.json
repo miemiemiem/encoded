@@ -23,7 +23,7 @@
             "default": "1"
         },
         "full_length_non_chimeric_read_count": {
-            "title": "Read count",
+            "title": "Full length non-chimeric read count",
             "description": "Quantity of full-length reads not mapping chimerically of the genome",
             "type": "integer",
             "minimum": 0
