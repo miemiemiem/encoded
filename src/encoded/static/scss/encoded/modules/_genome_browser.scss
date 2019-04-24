@@ -13,6 +13,13 @@
 .valis-browser {
     width: 100%;
     min-height: 200px;
+    margin-top: 5px;
+    button {
+        svg {
+            margin-left: 0 !important;
+            margin-top: 0 !important;
+        }
+    }
 }
 
 .valis-genome-visualizer {
@@ -26,13 +33,14 @@
 
 .hpgv_ui-block {
     color: #364565;
-    background-color: #fff;
-    font-size: 12px;
-    border-radius: 0;
+    background-color: #f2f2f2;//#d8e0e8;
+    font-size: 16px;
     box-shadow: none;
     border: 0;
-    border-bottom: 1px solid #d2d2d2;
-    border-right: 1px solid #d2d2d2;
+    border: 1px solid #BFBFBF;
+    &.hpgv_track-header {
+        font-size: 14px;
+    }
 }
 
 .hpgv_panel {
@@ -49,6 +57,39 @@
     --gc-banding-high: #1bffff;
     --text-color: rgba(255, 255, 255, 0.7);
     --text-additive-blending: 1.0; /* set to 0.0 for dark text colors */
+}
+
+// styles for bigBed files / annotation files
+.hpgv_track-annotation {
+    --transcript-arrow: #36456530;
+    --transcript:rgba(156, 163, 175, 0.13);
+    --coding: rgba(0, 44, 95, 0.79); // WE ARE USING THIS
+    --non-coding: rgba(79, 41, 140, 0.79);
+    --untranslated: rgba(191, 184, 184, 0.53);
+
+    --coding-max-score: rgba(87, 95, 90, 0.79);
+    --non-coding-max-score: rgba(255, 0, 59, 0.79);;
+}
+
+// .hpgv_track-sequence {
+//     --cursor: #ffffffcc;
+//     --loading-indicator: white;
+// 
+//     --nucleobase-a: #d06fa9;
+//     --nucleobase-t: #e89188;
+//     --nucleobase-g: #4bd897;
+//     --nucleobase-c: #44a4dc;
+// 
+//     --gc-banding-low: #d45591;
+//     --gc-banding-high: #60ffff;
+// 
+//     color: rgba(255, 255, 255, 0.7);
+//     --text-additive-blending: 1.0; /* set to 0.0 for dark text colors */
+// }
+
+// styles for signal track
+.hpgv_track-signal {
+    --signal-color: #A54747;
 }
 
 .hpgv_track {

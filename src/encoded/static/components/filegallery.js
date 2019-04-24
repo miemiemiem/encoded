@@ -1806,6 +1806,7 @@ class FileGalleryRendererComponent extends React.Component {
             inclusionOn: adminUser,
             /** Array of objects with the assemblies and annotations available for the files */
             availableAssembliesAnnotations: collectAssembliesAnnotations(datasetFiles),
+            facetsOpen: true,
         };
 
         /** Used to see if related_files has been updated */
@@ -1827,6 +1828,7 @@ class FileGalleryRendererComponent extends React.Component {
         this.handleBrowserChange = this.handleBrowserChange.bind(this);
         this.handleBrowserFileSelect = this.handleBrowserFileSelect.bind(this);
         this.handleVisualize = this.handleVisualize.bind(this);
+        this.toggleFacets = this.toggleFacets.bind(this);
     }
 
     // Set the default filter after the graph has been analyzed once.
@@ -2007,6 +2009,10 @@ class FileGalleryRendererComponent extends React.Component {
         });
     }
 
+    toggleFacets() {
+        this.setState(prevState => ({ facetsOpen: !prevState.facetsOpen }));
+    }
+
     render() {
         const { context, schemas, hideGraph, showReplicateNumber } = this.props;
         let allGraphedFiles;
@@ -2018,6 +2024,41 @@ class FileGalleryRendererComponent extends React.Component {
 
         // Get a list of files for the graph (filters out excluded files if requested by the user).
         const includedFiles = this.filterForInclusion(this.state.files);
+
+        // Collecting information for facets
+        // Relevant categories: File type, Output Type, * Replicate, Mapping Assembly
+        const fileType = {};
+        const outputType = {};
+        const replicate = {};
+        const mappingAssembly = {};
+        context.files.forEach((file) => {
+            // collect 'File type'
+            if (fileType[file.file_type]) {
+                fileType[file.file_type] += 1;
+            } else {
+                fileType[file.file_type] = 1;
+            }
+            // collect 'Output type'
+            if (outputType[file.output_type]) {
+                outputType[file.output_type] += 1;
+            } else {
+                outputType[file.output_type] = 1;
+            }
+            // collect 'replicate'
+            const fileReplicate = (file.biological_replicates ? file.biological_replicates.sort((a, b) => a - b).join(', ') : '');
+            if (replicate[fileReplicate]) {
+                replicate[fileReplicate] += 1;
+            } else {
+                replicate[fileReplicate] = 1;
+            }
+            // if (replicate[file.replicates])
+            // collect 'mappingAssembly'
+            if (mappingAssembly[file.assembly]) {
+                mappingAssembly[file.assembly] += 1;
+            } else {
+                mappingAssembly[file.assembly] = 1;
+            }
+        });
 
         const fileTable = (
             <FileTable
@@ -2058,6 +2099,11 @@ class FileGalleryRendererComponent extends React.Component {
         const modalClass = meta ? `graph-modal-${modalTypeMap[meta.type]}` : '';
         const browsers = this.getAvailableBrowsers();
 
+        // This needs to be fixed
+        const barStyle = {
+            width: `${Math.ceil((2 / 10) * 100)}%`,
+        };
+
         return (
             <Panel>
                 <PanelHeading addClasses="file-gallery-heading">
@@ -2077,42 +2123,98 @@ class FileGalleryRendererComponent extends React.Component {
                     visualizeHandler={this.handleVisualize}
                 />
 
-                {!hideGraph ?
-                    <TabPanel
-                        tabPanelCss="file-gallery-tab-bar"
-                        tabs={{ browser: 'Genome browser', graph: 'Association graph', tables: 'File details' }}
-                        decoration={<InclusionSelector inclusionOn={this.state.inclusionOn} handleInclusionChange={this.handleInclusionChange} />}
-                        decorationClasses="file-gallery__inclusion-selector"
-                    >
-                        <TabPanelPane key="browser">
-                            <GenomeBrowser files={this.state.files} />
-                        </TabPanelPane>
-                        <TabPanelPane key="graph">
-                            <FileGraph
-                                dataset={context}
-                                files={includedFiles}
-                                infoNode={this.state.infoNode}
-                                selectedAssembly={selectedAssembly}
-                                selectedAnnotation={selectedAnnotation}
-                                schemas={schemas}
-                                colorize={this.state.inclusionOn}
-                                handleNodeClick={this.handleNodeClick}
-                                loggedIn={!!(this.context.session && this.context.session['auth.userid'])}
-                                auditIndicators={this.props.auditIndicators}
-                                auditDetail={this.props.auditDetail}
-                            />
-                        </TabPanelPane>
+                <div className="file-gallery-container">
+                    <div className={`file-gallery-facets ${this.state.facetsOpen ? 'expanded' : 'collapsed'}`}>
+                        <button className="show-hide-facets" onClick={this.toggleFacets}>
+                            <i className={`${this.state.facetsOpen ? 'icon icon-chevron-left' : 'icon icon-chevron-right'}`} />
+                        </button>
+                        <div className="facet">
+                            <h5>File format</h5>
+                            {Object.keys(fileType).map(item =>
+                                <div className="facet-term__item">
+                                    <div className="facet-term__text">
+                                        <span>{item}</span>
+                                    </div>
+                                    <div className="facet-term__count">{fileType[item]}</div>
+                                    <div className="facet-term__bar" style={barStyle} />
+                                </div>
+                            )}
+                        </div>
+                        <div className="facet">
+                            <h5>Output type</h5>
+                            {Object.keys(outputType).map(item =>
+                                <div className="facet-term__item">
+                                    <div className="facet-term__text">
+                                        <span>{item}</span>
+                                    </div>
+                                    <div className="facet-term__count">{outputType[item]}</div>
+                                    <div className="facet-term__bar" style={barStyle} />
+                                </div>
+                            )}
+                        </div>
+                        <div className="facet">
+                            <h5>Replicates</h5>
+                            {Object.keys(replicate).map(item =>
+                                <div className="facet-term__item">
+                                    <div className="facet-term__text">
+                                        <span>{item}</span>
+                                    </div>
+                                    <div className="facet-term__count">{replicate[item]}</div>
+                                    <div className="facet-term__bar" style={barStyle} />
+                                </div>
+                            )}
+                        </div>
+                        <div className="facet">
+                            <h5>Mapping assembly</h5>
+                            {Object.keys(mappingAssembly).map(item =>
+                                <div className="facet-term__item">
+                                    <div className="facet-term__text">
+                                        <span>{item}</span>
+                                    </div>
+                                    <div className="facet-term__count">{mappingAssembly[item]}</div>
+                                    <div className="facet-term__bar" style={barStyle} />
+                                </div>
+                            )}
+                        </div>
+                    </div>
 
-                        <TabPanelPane key="tables">
-                            {/* If logged in and dataset is released, need to combine search of files that reference
-                                this dataset to get released and unreleased ones. If not logged in, then just get
-                                files from dataset.files */}
-                            {fileTable}
-                        </TabPanelPane>
-                    </TabPanel>
-                :
-                    <div>{fileTable}</div>
-                }
+                    {!hideGraph ?
+                        <TabPanel
+                            tabPanelCss={`file-gallery-tab-bar ${this.state.facetsOpen ? 'expanded' : ''}`}
+                            tabs={{ browser: 'Genome browser', graph: 'Association graph', tables: 'File details' }}
+                            decoration={<InclusionSelector inclusionOn={this.state.inclusionOn} handleInclusionChange={this.handleInclusionChange} />}
+                            decorationClasses="file-gallery__inclusion-selector"
+                        >
+                            <TabPanelPane key="browser">
+                                <GenomeBrowser files={this.state.files} />
+                            </TabPanelPane>
+                            <TabPanelPane key="graph">
+                                <FileGraph
+                                    dataset={context}
+                                    files={includedFiles}
+                                    infoNode={this.state.infoNode}
+                                    selectedAssembly={selectedAssembly}
+                                    selectedAnnotation={selectedAnnotation}
+                                    schemas={schemas}
+                                    colorize={this.state.inclusionOn}
+                                    handleNodeClick={this.handleNodeClick}
+                                    loggedIn={!!(this.context.session && this.context.session['auth.userid'])}
+                                    auditIndicators={this.props.auditIndicators}
+                                    auditDetail={this.props.auditDetail}
+                                />
+                            </TabPanelPane>
+
+                            <TabPanelPane key="tables">
+                                {/* If logged in and dataset is released, need to combine search of files that reference
+                                    this dataset to get released and unreleased ones. If not logged in, then just get
+                                    files from dataset.files */}
+                                {fileTable}
+                            </TabPanelPane>
+                        </TabPanel>
+                    :
+                        <div>{fileTable}</div>
+                    }
+                </div>
 
                 {meta && this.state.infoNodeVisible ?
                     <Modal closeModal={this.closeModal}>

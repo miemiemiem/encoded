@@ -272,6 +272,84 @@ a[href^="http://encodedcc.sdsc.edu/warehouse/"]:after {
     position: relative;
 }
 
+.file-gallery-controls {
+    justify-content: flex-end;
+}
+
+.file-gallery-container {
+    display: flex;
+    .file-gallery-facets {
+        position: relative;
+        -webkit-transition: flex-basis .1s ease-in-out;
+        -moz-transition: flex-basis .1s ease-in-out;
+        -o-transition: flex-basis .1s ease-in-out;
+        transition: flex-basis .1s ease-in-out;
+        .show-hide-facets {
+            position: absolute;
+            padding: 10px;
+            top: 50px;
+            cursor: pointer;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            -webkit-transition: right .1s ease-in-out;
+            -moz-transition: right .1s ease-in-out;
+            -o-transition: right .1s ease-in-out;
+            transition: right .1s ease-in-out;
+        }
+        
+        &.collapsed {
+            flex: 0 1 30px;
+            padding: 0;
+            .show-hide-facets {
+                right: -30px;
+                border-top-right-radius: 5px;
+                border-bottom-right-radius: 5px;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                background: white;
+                z-index: 1000;
+                border-top: 2px solid #d2d2d2;
+                border-bottom: 2px solid #d2d2d2;
+                border-right: 2px solid #d2d2d2;
+                border-left: 0;
+            }
+            .facet {
+                display: none;
+            }
+        }
+        &.expanded {
+            flex: 0 1 20%;
+            padding: 20px;
+            padding-top: 70px;
+            .show-hide-facets {
+                right: -2px;
+                border-top: 2px solid #d2d2d2;
+                border-bottom: 2px solid #d2d2d2;
+                border-left: 2px solid #d2d2d2;
+                border-right: 2px solid white;
+            }
+        }
+        border-right: 2px solid #d2d2d2;
+        .facet-term__item {
+            margin-bottom: 2px;
+            .facet-term__count {
+                z-index: 2;
+            }
+            .facet-term__bar {
+                z-index: 1;
+            }
+        }
+    }
+    .file-gallery-tab-bar {
+        flex: 0 1 80%;
+        &.expanded {
+            flex: 0 1 calc(100% - 30px);
+        }
+    }
+}
+
 .file-gallery-visualize {
     margin-top: 5px;
 
@@ -286,7 +364,7 @@ a[href^="http://encodedcc.sdsc.edu/warehouse/"]:after {
 
 .file-gallery-controls {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     align-items: center;
     padding: 5px;
     background-color: #c0c0c0;
