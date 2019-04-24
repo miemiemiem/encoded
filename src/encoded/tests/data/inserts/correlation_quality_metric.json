@@ -21,7 +21,7 @@
         "attachment": "generic_from_star_final_out.txt",
         "lab": "/labs/john-stamatoyannopoulos/",
         "award": "/awards/U41HG007355/",
-        "Pearson correlation": 0.8839878512395053,
+        "Spearman correlation": 0.8839878512395053,
         "Details": "Correlation of 2 replicate signal results for microRNA"
     }
 ]
