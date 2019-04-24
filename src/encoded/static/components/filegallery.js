@@ -1780,6 +1780,35 @@ InclusionSelector.propTypes = {
     handleInclusionChange: PropTypes.func.isRequired,
 };
 
+// Display facets for files
+const FileFacet = (props) => {
+    const { facetObject, facetTitle } = props;
+    // This needs to be fixed
+    console.log(facetObject);
+    let objSum = 0;
+    Object.keys(facetObject).forEach((key) => {
+        objSum += facetObject[key];
+    });
+    return (
+        <div className="facet">
+            <h5>{facetTitle}</h5>
+            {Object.keys(facetObject).map(item =>
+                <div className="facet-term__item">
+                    <div className="facet-term__text">
+                        <span>{item}</span>
+                    </div>
+                    <div className="facet-term__count">{facetObject[item]}</div>
+                    <div className="facet-term__bar" style={{ width: `${Math.ceil((facetObject[item] / objSum) * 100)}%` }} />
+                </div>
+            )}
+        </div>
+    );
+};
+
+FileFacet.propTypes = {
+    facetObject: PropTypes.object.isRequired,
+    facetTitle: PropTypes.string.isRequired,
+};
 
 // Function to render the file gallery, and it gets called after the file search results (for files associated with
 // the displayed experiment) return.
@@ -2099,11 +2128,6 @@ class FileGalleryRendererComponent extends React.Component {
         const modalClass = meta ? `graph-modal-${modalTypeMap[meta.type]}` : '';
         const browsers = this.getAvailableBrowsers();
 
-        // This needs to be fixed
-        const barStyle = {
-            width: `${Math.ceil((2 / 10) * 100)}%`,
-        };
-
         return (
             <Panel>
                 <PanelHeading addClasses="file-gallery-heading">
@@ -2128,54 +2152,10 @@ class FileGalleryRendererComponent extends React.Component {
                         <button className="show-hide-facets" onClick={this.toggleFacets}>
                             <i className={`${this.state.facetsOpen ? 'icon icon-chevron-left' : 'icon icon-chevron-right'}`} />
                         </button>
-                        <div className="facet">
-                            <h5>File format</h5>
-                            {Object.keys(fileType).map(item =>
-                                <div className="facet-term__item">
-                                    <div className="facet-term__text">
-                                        <span>{item}</span>
-                                    </div>
-                                    <div className="facet-term__count">{fileType[item]}</div>
-                                    <div className="facet-term__bar" style={barStyle} />
-                                </div>
-                            )}
-                        </div>
-                        <div className="facet">
-                            <h5>Output type</h5>
-                            {Object.keys(outputType).map(item =>
-                                <div className="facet-term__item">
-                                    <div className="facet-term__text">
-                                        <span>{item}</span>
-                                    </div>
-                                    <div className="facet-term__count">{outputType[item]}</div>
-                                    <div className="facet-term__bar" style={barStyle} />
-                                </div>
-                            )}
-                        </div>
-                        <div className="facet">
-                            <h5>Replicates</h5>
-                            {Object.keys(replicate).map(item =>
-                                <div className="facet-term__item">
-                                    <div className="facet-term__text">
-                                        <span>{item}</span>
-                                    </div>
-                                    <div className="facet-term__count">{replicate[item]}</div>
-                                    <div className="facet-term__bar" style={barStyle} />
-                                </div>
-                            )}
-                        </div>
-                        <div className="facet">
-                            <h5>Mapping assembly</h5>
-                            {Object.keys(mappingAssembly).map(item =>
-                                <div className="facet-term__item">
-                                    <div className="facet-term__text">
-                                        <span>{item}</span>
-                                    </div>
-                                    <div className="facet-term__count">{mappingAssembly[item]}</div>
-                                    <div className="facet-term__bar" style={barStyle} />
-                                </div>
-                            )}
-                        </div>
+                        <FileFacet facetTitle={'File format'} facetObject={fileType} />
+                        <FileFacet facetTitle={'Output type'} facetObject={outputType} />
+                        <FileFacet facetTitle={'Replicates'} facetObject={replicate} />
+                        <FileFacet facetTitle={'Mapping assembly'} facetObject={mappingAssembly} />
                     </div>
 
                     {!hideGraph ?
