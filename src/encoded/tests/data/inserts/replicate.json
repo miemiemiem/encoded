@@ -588,7 +588,7 @@
         "uuid": "0f427e79-556e-4125-8102-f6723471807e"
     },
     {
-        "_test": "replicate for ISO-seq",
+        "_test": "replicate for long read RNA-seq",
         "experiment": "/experiments/ENCSR751ISO/",
         "biological_replicate_number": 1,
         "technical_replicate_number": 1,
@@ -598,7 +598,7 @@
         "uuid": "3b427e79-556e-4125-8102-f6723471807e"
     },
     {
-        "_test": "second replicate for ISO-seq",
+        "_test": "second replicate for long read RNA-seq",
         "experiment": "/experiments/ENCSR751ISO/",
         "biological_replicate_number": 2,
         "technical_replicate_number": 1,
