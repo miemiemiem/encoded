@@ -223,3 +223,36 @@ class HistoneChipSeqQualityMetric(QualityMetric, CalculatedAssayTermID):
 class GenericQualityMetric(QualityMetric, CalculatedAssayTermID):
     item_type = 'generic_quality_metric'
     schema = load_schema('encoded:schemas/generic_quality_metric.json')
+
+
+@collection(
+    name='atac-filter-quality-metrics',
+    properties={
+        'title': "ATAC Filter Quality Metric",
+        'description': "ATAC filter quality metric",
+    })
+class AtacFilterQualityMetric(QualityMetric, CalculatedAssayTermID):
+    item_type = 'atac_filter_quality_metric'
+    schema = load_schema('encoded:schemas/atac_filter_quality_metric.json')
+
+
+@collection(
+    name='atac-alignment-quality-metrics',
+    properties={
+        'title': "ATAC Alignment Quality Metric",
+        'description': "ATAC alignment quality metric",
+    })
+class AtacAlignmentQualityMetric(QualityMetric, CalculatedAssayTermID):
+    item_type = 'atac_alignment_quality_metric'
+    schema = load_schema('encoded:schemas/atac_alignment_quality_metric.json')
+
+
+@collection(
+    name='atac-peak-calling-quality-metrics',
+    properties={
+        'title': "ATAC Peak Calling Quality Metric",
+        'description': "ATAC peak calling quality metric",
+    })
+class AtacPeakCallingQualityMetric(QualityMetric, CalculatedAssayTermID):
+    item_type = 'atac_peak_callin_quality_metric'
+    schema = load_schema('encoded:schemas/atac_peak_calling_quality_metric.json')
