@@ -63,11 +63,11 @@
 .hpgv_track-annotation {
     --transcript-arrow: #36456530;
     --transcript:rgba(156, 163, 175, 0.13);
-    --coding: rgba(0, 44, 95, 0.79); // WE ARE USING THIS
+    --coding: #575F5A;//rgba(0, 44, 95, 0.79); // WE ARE USING THIS
     --non-coding: rgba(79, 41, 140, 0.79);
     --untranslated: rgba(191, 184, 184, 0.53);
 
-    --coding-max-score: rgba(87, 95, 90, 0.79);
+    --coding-max-score: #575F5A;//rgba(87, 95, 90, 0.79);
     --non-coding-max-score: rgba(255, 0, 59, 0.79);;
 }
 
@@ -89,7 +89,7 @@
 
 // styles for signal track
 .hpgv_track-signal {
-    --signal-color: #A54747;
+    --signal-color: #2A6496;//#A54747;
 }
 
 .hpgv_track {

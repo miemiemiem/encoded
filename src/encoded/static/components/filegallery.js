@@ -1782,7 +1782,7 @@ InclusionSelector.propTypes = {
 
 // Display facets for files
 const FileFacet = (props) => {
-    const { facetObject, facetTitle } = props;
+    const { facetObject, facetTitle, filterFiles, facetKey } = props;
     let objSum = 0;
     Object.keys(facetObject).forEach((key) => {
         objSum += facetObject[key];
@@ -1791,7 +1791,7 @@ const FileFacet = (props) => {
         <div className="facet">
             <h5>{facetTitle}</h5>
             {Object.keys(facetObject).map(item =>
-                <div className="facet-term__item">
+                <div className="facet-term__item" onClick={() => filterFiles(item, facetKey)} key={item}>
                     <div className="facet-term__text">
                         <span>{item}</span>
                     </div>
@@ -1806,6 +1806,8 @@ const FileFacet = (props) => {
 FileFacet.propTypes = {
     facetObject: PropTypes.object.isRequired,
     facetTitle: PropTypes.string.isRequired,
+    filterFiles: PropTypes.func.isRequired,
+    facetKey: PropTypes.string.isRequired,
 };
 
 // Function to render the file gallery, and it gets called after the file search results (for files associated with
@@ -1833,7 +1835,10 @@ class FileGalleryRendererComponent extends React.Component {
             inclusionOn: adminUser,
             /** Array of objects with the assemblies and annotations available for the files */
             availableAssembliesAnnotations: collectAssembliesAnnotations(datasetFiles),
+            /** Display facets sidebar */
             facetsOpen: true,
+            /** Filters for files */
+            fileFilters: {},
         };
 
         /** Used to see if related_files has been updated */
@@ -1856,6 +1861,8 @@ class FileGalleryRendererComponent extends React.Component {
         this.handleBrowserFileSelect = this.handleBrowserFileSelect.bind(this);
         this.handleVisualize = this.handleVisualize.bind(this);
         this.toggleFacets = this.toggleFacets.bind(this);
+        this.filterFiles = this.filterFiles.bind(this);
+        this.clearFileFilters = this.clearFileFilters.bind(this);
     }
 
     // Set the default filter after the graph has been analyzed once.
@@ -1931,14 +1938,28 @@ class FileGalleryRendererComponent extends React.Component {
             relatedPromise = Promise.resolve(this.prevRelatedFiles);
         }
 
+        function filterItems(array, key, keyValue) {
+            return array.filter((el) => {
+                return el[key] === keyValue;
+            });
+        }
+
         // Whether we have related_files or not, get all files' assemblies and annotations, and
         // the first genome browser for them.
         relatedPromise.then((relatedFiles) => {
             this.prevRelatedFiles = relatedFiles;
             const allFiles = datasetFiles.concat(relatedFiles);
-            if (allFiles.length !== this.state.files.length) {
-                this.setState({ files: allFiles });
 
+            // check for filters
+            let filteredFiles = allFiles;
+            if (Object.keys(this.state.fileFilters).length > 0) {
+                Object.keys(this.state.fileFilters).forEach((fileFilter) => {
+                    filteredFiles = filterItems(filteredFiles, fileFilter, this.state.fileFilters[fileFilter]);
+                });
+            }
+
+            if (filteredFiles.length !== this.state.files.length) {
+                this.setState({ files: filteredFiles });
                 // From the new set of files, calculate the currently selected assembly and annotation to display in
                 // the graph and tables.
                 this.setState({ availableAssembliesAnnotations: collectAssembliesAnnotations(allFiles) });
@@ -1953,6 +1974,13 @@ class FileGalleryRendererComponent extends React.Component {
                 });
             }
         });
+    }
+
+    /**
+     * Clear selected filters
+     */
+    clearFileFilters() {
+        this.setState({ fileFilters: {} });
     }
 
     /**
@@ -2040,6 +2068,16 @@ class FileGalleryRendererComponent extends React.Component {
         this.setState(prevState => ({ facetsOpen: !prevState.facetsOpen }));
     }
 
+    filterFiles(value, facet) {
+        if (Object.keys(this.state.fileFilters).length > 0) {
+            const appendedFilter = this.state.fileFilters;
+            appendedFilter[facet] = value;
+            this.setState({ fileFilters: appendedFilter });
+        } else {
+            this.setState({ fileFilters: { [facet]: value } });
+        }
+    }
+
     render() {
         const { context, schemas, hideGraph, showReplicateNumber } = this.props;
         let allGraphedFiles;
@@ -2058,7 +2096,7 @@ class FileGalleryRendererComponent extends React.Component {
         const outputType = {};
         const replicate = {};
         const mappingAssembly = {};
-        context.files.forEach((file) => {
+        this.state.files.forEach((file) => {
             // collect 'File type'
             if (fileType[file.file_type]) {
                 fileType[file.file_type] += 1;
@@ -2146,14 +2184,18 @@ class FileGalleryRendererComponent extends React.Component {
                 />
 
                 <div className="file-gallery-container">
-                    <div className={`file-gallery-facets ${this.state.facetsOpen ? 'expanded' : 'collapsed'}`}>
+                    <div className={`file-gallery-facets ${this.state.facetsOpen ? 'expanded' : 'collapsed'}`} >
                         <button className="show-hide-facets" onClick={this.toggleFacets}>
                             <i className={`${this.state.facetsOpen ? 'icon icon-chevron-left' : 'icon icon-chevron-right'}`} />
                         </button>
-                        <FileFacet facetTitle={'File format'} facetObject={fileType} />
-                        <FileFacet facetTitle={'Output type'} facetObject={outputType} />
-                        <FileFacet facetTitle={'Replicates'} facetObject={replicate} />
-                        <FileFacet facetTitle={'Mapping assembly'} facetObject={mappingAssembly} />
+                        <button className="clear-file-facets" onClick={this.clearFileFilters}>
+                            <i className="icon icon-times-circle" />
+                            <span> Clear selected filters</span>
+                        </button>
+                        <FileFacet facetTitle={'File format'} facetObject={fileType} filterFiles={this.filterFiles} facetKey={'file_type'} />
+                        <FileFacet facetTitle={'Output type'} facetObject={outputType} filterFiles={this.filterFiles} facetKey={'output_type'} />
+                        <FileFacet facetTitle={'Replicates'} facetObject={replicate} filterFiles={this.filterFiles} facetKey={'biological_replicates'} />
+                        <FileFacet facetTitle={'Mapping assembly'} facetObject={mappingAssembly} filterFiles={this.filterFiles} facetKey={'assembly'} />
                     </div>
 
                     {!hideGraph ?
