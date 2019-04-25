@@ -63,6 +63,7 @@ ORDER = [
     'cpg_correlation_quality_metric',
     'chipseq_filter_quality_metric',
     'micro_rna_quantification_quality_metric',
+    'micro_rna_mapping_quality_metric',
     'samtools_flagstats_quality_metric',
     'mad_quality_metric',
     'correlation_quality_metric',

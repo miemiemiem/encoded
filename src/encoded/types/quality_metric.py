@@ -234,3 +234,14 @@ class GenericQualityMetric(QualityMetric, CalculatedAssayTermID):
 class MicroRnaQuantificationQualityMetric(QualityMetric, CalculatedAssayTermID):
     item_type = 'micro_rna_quantification_quality_metric'
     schema = load_schema('encoded:schemas/micro_rna_quantification_quality_metric.json')
+
+
+@collection(
+    name='micro-rna-mapping-quality-metrics',
+    properties={
+        'title': "microRNA Mapping Quality Metrics",
+        'description': 'A set of microRNA pipeline quantification QC metrics',
+    })
+class MicroRnaMappingQualityMetric(QualityMetric, CalculatedAssayTermID):
+    item_type = 'micro_rna_mapping_quality_metric'
+    schema = load_schema('encoded:schemas/micro_rna_mapping_quality_metric.json')
