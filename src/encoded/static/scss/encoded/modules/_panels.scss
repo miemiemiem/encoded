@@ -278,6 +278,18 @@ a[href^="http://encodedcc.sdsc.edu/warehouse/"]:after {
 
 .file-gallery-container {
     display: flex;
+    .clear-file-facets {
+        background: white;
+        border: 0;
+        padding: 0;
+        color: #e50400;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    .facet {
+        padding-bottom: 10px;
+    }
     .file-gallery-facets {
         position: relative;
         -webkit-transition: flex-basis .1s ease-in-out;
@@ -318,11 +330,14 @@ a[href^="http://encodedcc.sdsc.edu/warehouse/"]:after {
             .facet {
                 display: none;
             }
+            h4, .clear-file-facets, .facet {
+                display: none;
+            }
         }
         &.expanded {
             flex: 0 1 20%;
             padding: 20px;
-            padding-top: 70px;
+            padding-top: 30px;
             .show-hide-facets {
                 right: -2px;
                 border-top: 2px solid #d2d2d2;

@@ -1940,6 +1940,10 @@ class FileGalleryRendererComponent extends React.Component {
 
         function filterItems(array, key, keyValue) {
             return array.filter((el) => {
+                if (key === 'biological_replicates') {
+                    const replicate = (el.biological_replicates ? el.biological_replicates.sort((a, b) => a - b).join(', ') : '');
+                    return replicate === keyValue;
+                }
                 return el[key] === keyValue;
             });
         }
@@ -2185,13 +2189,16 @@ class FileGalleryRendererComponent extends React.Component {
 
                 <div className="file-gallery-container">
                     <div className={`file-gallery-facets ${this.state.facetsOpen ? 'expanded' : 'collapsed'}`} >
+                        <h4>Filter files </h4>
                         <button className="show-hide-facets" onClick={this.toggleFacets}>
                             <i className={`${this.state.facetsOpen ? 'icon icon-chevron-left' : 'icon icon-chevron-right'}`} />
                         </button>
-                        <button className="clear-file-facets" onClick={this.clearFileFilters}>
-                            <i className="icon icon-times-circle" />
-                            <span> Clear selected filters</span>
-                        </button>
+                        { (Object.keys(this.state.fileFilters).length >= 1) ?
+                            <button className="clear-file-facets" onClick={this.clearFileFilters}>
+                                <i className="icon icon-times-circle" />
+                                <span> Clear all filters</span>
+                            </button>
+                        : null }
                         <FileFacet facetTitle={'File format'} facetObject={fileType} filterFiles={this.filterFiles} facetKey={'file_type'} />
                         <FileFacet facetTitle={'Output type'} facetObject={outputType} filterFiles={this.filterFiles} facetKey={'output_type'} />
                         <FileFacet facetTitle={'Replicates'} facetObject={replicate} filterFiles={this.filterFiles} facetKey={'biological_replicates'} />
