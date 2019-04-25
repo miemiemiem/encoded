@@ -49,6 +49,7 @@ seq_assays = [
     'RIP-seq',
     'PLAC-seq',
     'MPRA',
+    'long read RNA-seq'
 ]
 
 
@@ -499,7 +500,7 @@ def audit_experiment_standards_dispatcher(value, system, files_structure):
                                             'single cell isolation followed by RNA-seq',
                                             'whole-genome shotgun bisulfite sequencing',
                                             'genetic modification followed by DNase-seq',
-                                            'ISO-seq', 'icSHAPE']:
+                                            'long read RNA-seq', 'icSHAPE']:
         return
     if not value.get('original_files'):
         return
@@ -543,7 +544,7 @@ def audit_experiment_standards_dispatcher(value, system, files_structure):
                                     'CRISPRi followed by RNA-seq',
                                     'CRISPR genome editing followed by RNA-seq',
                                     'single cell isolation followed by RNA-seq',
-                                    'icSHAPE', 'ISO-seq']:
+                                    'icSHAPE', 'long read RNA-seq']:
         yield from check_experiment_rna_seq_standards(
             value,
             files_structure,
@@ -858,11 +859,17 @@ def check_experiment_rna_seq_standards(value,
         yield from check_experiment_long_read_rna_standards(
             value,
             alignment_files,
-            pipeline_title,
             gene_quantifications,
             desired_assembly,
             desired_annotation,
-            standards_links[pipeline_title]
+            upper_limit_flnc=600000,
+            lower_limit_flnc=400000,
+            upper_limit_mapping_rate=0.9,
+            lower_limit_mapping_rate=0.6,
+            upper_limit_spearman=0.8,
+            lower_limit_spearman=0.6,
+            upper_limit_genes_detected=8000,
+            lower_limit_genes_detected=4000,
         )
     return
 
@@ -1165,70 +1172,114 @@ def check_experiment_cage_rampage_standards(experiment,
 
 def check_experiment_long_read_rna_standards(
     experiment,
-    some_file,
-    pipeline_title,
+    alignment_files,
+    gene_quantifications,
     desired_assembly,
     desired_annotation,
-    standards_link
+    upper_limit_flnc,
+    lower_limit_flnc,
+    upper_limit_mapping_rate,
+    lower_limit_mapping_rate,
+    upper_limit_spearman,
+    lower_limit_spearman,
+    upper_limit_genes_detected,
+    lower_limit_genes_detected,
 ):
-    upper_limit_flnc = 6e5
-    lower_limit_flnc = 4e5
-    upper_limit_mapping_rate = 90
-    lower_limit_mapping_rate = 60
-    upper_limit_spearman = 0.8
-    lower_limit_spearman = 0.6
-    upper_limit_genes_detected = 8000
-    lower_limit_genes_detected = 4000
-    lower_limit_percent_genes_in_short_read = 0.9
+    # Gather metrics
+    quantification_metrics = get_metrics(
+        gene_quantifications,
+        'LongReadRnaQuantificationQualityMetric',
+        desired_assembly,
+        desired_annotation,
+    )
+    # Desired annotation does not pertain to alignment files
+    alignment_metrics = get_metrics(
+        alignment_files,
+        'LongReadRnaMappingQualityMetric',
+        desired_assembly,
+    )
+    correlation_metrics = get_metrics(
+        gene_quantifications,
+        'CorrelationQualityMetric',
+        desired_assembly,
+        desired_annotation,
+    )
+    # Audit Spearman correlations
+    yield from check_replicate_metric_dual_threshold(
+        correlation_metrics,
+        metric_name='Spearman correlation',
+        audit_name='replicate concordance',
+        upper_limit=upper_limit_spearman,
+        lower_limit=lower_limit_spearman,
+    )
+    # Audit flnc read counts
+    yield from check_replicate_metric_dual_threshold(
+        alignment_metrics,
+        metric_name='full_length_non_chimeric_read_count',
+        audit_name='sequencing depth',
+        upper_limit=upper_limit_flnc,
+        lower_limit=lower_limit_flnc,
+        metric_description='full-length non-chimeric (FLNC) read count',
+    )
+    # Audit mapping rate
+    yield from check_replicate_metric_dual_threshold(
+        alignment_metrics,
+        metric_name='mapping_rate',
+        audit_name='mapping rate',
+        upper_limit=upper_limit_mapping_rate,
+        lower_limit=lower_limit_mapping_rate,
+        metric_description='mapping rate',
+    )
+    # Audit gene quantifications
+    yield from check_replicate_metric_dual_threshold(
+        quantification_metrics,
+        metric_name='genes_detected',
+        audit_name='genes detected',
+        upper_limit=upper_limit_genes_detected,
+        lower_limit=lower_limit_genes_detected,
+        metric_description='GENCODE genes detected',
+    )
+    return
 
-    qc_metric = some_file['quality_metrics'][0]
-    for replicate in qc_metric['replicates_sequencing_depth']:
-        # Check the flnc read counts of the replicates
-        rep_flnc = replicate['full_length_non_chimeric_read_count']
-        if rep_flnc < upper_limit_flnc:
+
+def check_replicate_metric_dual_threshold(
+    metrics,
+    metric_name,
+    audit_name,
+    upper_limit,
+    lower_limit,
+    metric_description=None,
+):
+    """
+    Generic function to handle audits on files from a single replicate with multiple thresholds
+    """
+    if not metric_description:
+        metric_description = metric_name
+    for metric in metrics:
+        metric_value = metric.get(metric_name)
+        files = metric['quality_metric_of']
+        if metric_value and metric_value < upper_limit:
             level = 'WARNING'
-            standards_descriptor = 'recommendations'
-            if rep_flnc < lower_limit_flnc:
+            standards_severity = 'recommendations'
+            audit_name_severity = 'borderline'
+            if metric_value < lower_limit:
                 level = 'NOT_COMPLIANT'
-                standards_descriptor = 'requirements'
+                standards_severity = 'requirements'
+                audit_name_severity = 'insufficient'
+            file_names_fmt = str(files).replace('\'', ' ')
             detail = (
-                'Replicate {} has a full-length non-chimeric (FLNC) read count of {}, which is '
-                'below ENCODE {}. According to ENCODE standards, a FLNC read count in a '
-                'replicate of > 400,000 is required, while a FLNC read count > 600,000 is '
-                'recommended.'
+                'Files {} have {} of {}, which is below ENCODE {}. According to '
+                'ENCODE standards, a number for this property in a replicate of > {:,} '
+                'is required, and > {:,} is recommended.'
             ).format(
-                replicate['replicate'],
-                rep_flnc,
-                standards_descriptor,
+                file_names_fmt,
+                metric_description,
+                metric_value,
+                standards_severity,
+                lower_limit,
+                upper_limit,
             )
-            yield AuditFailure('insufficient sequencing depth', detail, level=level)
-    for replicate in qc_metric['replicates_genes_detected']:
-        # Check the number of genes detected
-        rep_genes_detected = replicate['genes_detected']
-        percent_genes_in_short_read = replicate['percent_genes_in_short_read']
-        if rep_genes_detected < upper_limit_genes_detected:
-            level = 'WARNING'
-            if (
-                rep_genes_detected < lower_limit_genes_detected and
-                percent_genes_in_short_read < lower_limit_percent_genes_in_short_read
-            ):
-                level = 'NOT_COMPLIANT'
-            detail = (
-                'Replicate {} has {} detected GENCODE genes and {} of its genes detected at > 5 '
-                'transcripts per million (TPM) in an equivalent short read RNA-seq experiment, '
-                'which is below ENCODE {}. According to ENCODE standards, a number of GENCODE '
-                'genes detected in a replicate of > 400,000 is required, and > 800,000 is '
-                'recommended. In addition, a percentage of genes detected at > 5 transcripts per'
-                'million (TPM) in an equivalent short read RNA-seq experiment of > 90% is required.'
-            ).format(
-                replicate['replicate'],
-                rep_genes_detected,
-                percent_genes_in_short_read * 100,
-                standards_descriptor,
-            )
-            yield AuditFailure('insufficient genes detected', detail, level=level)
-    for replicate in qc_metric['replicates_correlation']:
-        # Check the spearman correlation between the pairs of replicates
+            yield AuditFailure('{} {}'.format(audit_name_severity, audit_name), detail, level=level)
     return
 
 
@@ -3258,12 +3309,6 @@ def audit_experiment_nih_institutional_certification(value, system, excluded_typ
                   ' certification required for human data'.format(value['@id'], b))
         yield AuditFailure('missing nih_institutional_certification', detail, level='ERROR')
 
-
-def audit_experiment_long_read_rna_standards(value, system):
-    if value['status'] in ['deleted', 'replaced', 'revoked']:
-        return
-    if value['assay_term_name'] not in ['ISO-seq', 'icSHAPE']:
-        return
 
 
 #######################
