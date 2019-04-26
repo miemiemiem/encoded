@@ -1787,7 +1787,7 @@ def test_audit_experiment_long_rna_standards(testapp,
                'insufficient read depth' for error in collect_audit_errors(res))
 
 
-def test_audit_experiment_long_read_rrna_standards(
+def test_audit_experiment_long_read_rna_standards(
     testapp,
     base_experiment,
     replicate_1_1,
