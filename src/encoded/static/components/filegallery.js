@@ -2217,7 +2217,7 @@ class FileGalleryRendererComponent extends React.Component {
                             decorationClasses="file-gallery__inclusion-selector"
                         >
                             <TabPanelPane key="browser">
-                                <GenomeBrowser files={this.state.selectedBrowserFiles} expanded={this.state.facetsOpen} />
+                                <GenomeBrowser files={this.state.files} expanded={this.state.facetsOpen} />
                             </TabPanelPane>
                             <TabPanelPane key="graph">
                                 <FileGraph
