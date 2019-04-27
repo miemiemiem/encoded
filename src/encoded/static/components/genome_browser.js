@@ -329,13 +329,45 @@ class GenomeBrowser extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props !== prevProps) {
-            setTimeout(this.drawTracksResized, 1000);
-        }
         // If the parent container changed size, we need to update the browser width
-        // if (this.props.expanded !== prevProps.expanded) {
-        //     setTimeout(this.drawTracksResized, 1000);
-        // }
+        if (this.props.expanded !== prevProps.expanded) {
+            setTimeout(this.drawTracksResized, 1000);
+        } else if (this.props !== prevProps && this.state.files) {
+            const tracks = this.state.files.map((file) => {
+                if (file.name) {
+                    const trackObj = {};
+                    trackObj.name = file.name;
+                    trackObj.type = 'signal';
+                    trackObj.path = file.href;
+                    trackObj.heightPx = 50;
+                    return trackObj;
+                } else if (file.file_format === 'bigWig') {
+                    const trackObj = {};
+                    trackObj.name = file.accession;
+                    trackObj.type = 'signal';
+                    trackObj.path = this.state.domain + file.href;
+                    trackObj.heightPx = 200;
+                    return trackObj;
+                }
+                const trackObj = {};
+                trackObj.name = file.accession;
+                trackObj.type = 'annotation';
+                trackObj.compact = true;
+                trackObj.path = this.state.domain + file.href;
+                trackObj.heightPx = 50;
+                return trackObj;
+            });
+
+            this.setState({ trackList: tracks }, () => {
+                if (this.chartdisplay) {
+                    this.setState({
+                        width: this.chartdisplay.clientWidth,
+                    }, () => {
+                        this.drawTracks(this.chartdisplay);
+                    });
+                }
+            });
+        }
     }
 
     drawTracksResized() {
