@@ -329,10 +329,13 @@ class GenomeBrowser extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        // If the parent container changed size, we need to update the browser width
-        if (this.props.expanded !== prevProps.expanded) {
+        if (this.props !== prevProps) {
             setTimeout(this.drawTracksResized, 1000);
         }
+        // If the parent container changed size, we need to update the browser width
+        // if (this.props.expanded !== prevProps.expanded) {
+        //     setTimeout(this.drawTracksResized, 1000);
+        // }
     }
 
     drawTracksResized() {
