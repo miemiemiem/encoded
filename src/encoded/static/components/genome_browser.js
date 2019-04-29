@@ -318,7 +318,6 @@ class GenomeBrowser extends React.Component {
 
         let domain = `${window.location.protocol}//${window.location.hostname}`;
         if (domain.includes('localhost')) {
-            console.log('we are LOOOOCAL');
             domain = domainName;
             files = [...pinnedFiles, ...dummyFiles];
         }
@@ -360,7 +359,10 @@ class GenomeBrowser extends React.Component {
                 newFiles = [...pinnedFiles, ...dummyFiles];
             } else {
                 console.log('if we get here there is an ISSUE');
-                newFiles = [...pinnedFiles, ...this.props.files];
+                let propsFiles = this.props.files;
+                propsFiles = propsFiles.filter(file => file.file_format === 'bigWig' || file.file_format === 'bigBed');
+                propsFiles = propsFiles.filter(file => ['released', 'in progress', 'archived'].indexOf(file.status) > -1);
+                newFiles = [...pinnedFiles, ...propsFiles];
             }
 
             console.log('we are passing newFiles to filesToTracks');
