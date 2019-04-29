@@ -262,6 +262,40 @@ const dummyFiles = [
     },
 ];
 
+const filesToTracks = (files, domain) => {
+    console.log('here is what we are getting from component');
+    console.log(files);
+    console.log(domain);
+    const tracks = files.map((file) => {
+        console.log(file.href);
+        if (file.name) {
+            const trackObj = {};
+            trackObj.name = file.name;
+            trackObj.type = 'signal';
+            trackObj.path = file.href;
+            trackObj.heightPx = 50;
+            return trackObj;
+        } else if (file.file_format === 'bigWig') {
+            const trackObj = {};
+            trackObj.name = file.accession;
+            trackObj.type = 'signal';
+            trackObj.path = domain + file.href;
+            trackObj.heightPx = 200;
+            return trackObj;
+        }
+        const trackObj = {};
+        trackObj.name = file.accession;
+        trackObj.type = 'annotation';
+        trackObj.compact = true;
+        trackObj.path = domain + file.href;
+        trackObj.heightPx = 50;
+        return trackObj;
+    });
+    console.log('these are the tracks');
+    console.log(tracks);
+    return tracks;
+};
+
 class GenomeBrowser extends React.Component {
     constructor(props, context) {
         super(props, context);
@@ -288,35 +322,15 @@ class GenomeBrowser extends React.Component {
             domain = domainName;
             files = [...pinnedFiles, ...dummyFiles];
         }
+        
+        console.log('DOMAIN');
+        console.log(domain);
 
         console.log('these are the files');
         console.log(files);
 
-        const tracks = files.map((file) => {
-            if (file.name) {
-                const trackObj = {};
-                trackObj.name = file.name;
-                trackObj.type = 'signal';
-                trackObj.path = file.href;
-                trackObj.heightPx = 50;
-                return trackObj;
-            } else if (file.file_format === 'bigWig') {
-                const trackObj = {};
-                trackObj.name = file.accession;
-                trackObj.type = 'signal';
-                trackObj.path = domain + file.href;
-                trackObj.heightPx = 200;
-                return trackObj;
-            }
-            const trackObj = {};
-            trackObj.name = file.accession;
-            trackObj.type = 'annotation';
-            trackObj.compact = true;
-            trackObj.path = domain + file.href;
-            trackObj.heightPx = 50;
-            return trackObj;
-        });
-
+        // this.setState({ domain });
+        const tracks = filesToTracks(files, domain);
         this.setState({ trackList: tracks }, () => {
             if (this.chartdisplay) {
                 this.setState({
@@ -330,53 +344,38 @@ class GenomeBrowser extends React.Component {
 
     componentDidUpdate(prevProps) {
         console.log('genome browser component did update');
-        console.log('this.props');
-        console.log(this.props);
-        console.log('prevProps');
-        console.log(prevProps);
         // If the parent container changed size, we need to update the browser width
         if (this.props.expanded !== prevProps.expanded) {
+            console.log('parent container changed size so update browser width');
             setTimeout(this.drawTracksResized, 1000);
         }
-        if (this.props !== prevProps && this.props.files) {
-            console.log("props have changed and we must recompute things");
-            const newFiles = [...pinnedFiles, ...this.props.files];
-            const tracks = newFiles.map((file) => {
-                if (file.name) {
-                    const trackObj = {};
-                    trackObj.name = file.name;
-                    trackObj.type = 'signal';
-                    trackObj.path = file.href;
-                    trackObj.heightPx = 50;
-                    return trackObj;
-                } else if (file.file_format === 'bigWig') {
-                    const trackObj = {};
-                    trackObj.name = file.accession;
-                    trackObj.type = 'signal';
-                    trackObj.path = this.state.domain + file.href;
-                    trackObj.heightPx = 200;
-                    return trackObj;
-                }
-                const trackObj = {};
-                trackObj.name = file.accession;
-                trackObj.type = 'annotation';
-                trackObj.compact = true;
-                trackObj.path = this.state.domain + file.href;
-                trackObj.heightPx = 50;
-                return trackObj;
-            });
 
-            console.log('these are the tracks');
+        if (this.props !== prevProps && this.props.files) {
+            console.log('props have changed and we must recompute things');
+            let newFiles = [];
+            let domain = `${window.location.protocol}//${window.location.hostname}`;
+            if (domain.includes('localhost')) {
+                console.log('local files');
+                domain = domainName;
+                newFiles = [...pinnedFiles, ...dummyFiles];
+            } else {
+                console.log('if we get here there is an ISSUE');
+                newFiles = [...pinnedFiles, ...this.props.files];
+            }
+
+            console.log('we are passing newFiles to filesToTracks');
+            console.log(newFiles);
+            const tracks = filesToTracks(newFiles, domain);
             console.log(tracks);
 
             this.setState({ trackList: tracks }, () => {
                 console.log(this.chartdisplay);
                 if (this.chartdisplay) {
-                    console.log("setting client width");
+                    console.log('setting client width');
                     this.setState({
                         width: this.chartdisplay.clientWidth,
                     }, () => {
-                        console.log("triggering draw tracks");
+                        console.log('triggering draw tracks');
                         this.drawTracks(this.chartdisplay);
                     });
                 }
