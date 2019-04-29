@@ -329,11 +329,17 @@ class GenomeBrowser extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
+        console.log('genome browser component did update');
+        console.log('this.props');
+        console.log(this.props);
+        console.log('prevProps');
+        console.log(prevProps);
         // If the parent container changed size, we need to update the browser width
         if (this.props.expanded !== prevProps.expanded) {
             setTimeout(this.drawTracksResized, 1000);
-        } else if (this.props !== prevProps && this.state.files) {
-            const tracks = this.state.files.map((file) => {
+        }
+        if (this.props !== prevProps && this.state.files) {
+            const tracks = this.props.files.map((file) => {
                 if (file.name) {
                     const trackObj = {};
                     trackObj.name = file.name;
@@ -357,6 +363,9 @@ class GenomeBrowser extends React.Component {
                 trackObj.heightPx = 50;
                 return trackObj;
             });
+
+            console.log('these are the tracks');
+            console.log(tracks);
 
             this.setState({ trackList: tracks }, () => {
                 if (this.chartdisplay) {
