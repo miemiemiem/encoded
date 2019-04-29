@@ -1784,14 +1784,14 @@ InclusionSelector.propTypes = {
 const FileFacet = (props) => {
     const { facetObject, facetTitle, filterFiles, facetKey, selectedFilters } = props;
     // Only display 'bigBed' and 'bigWig' files
-    if (facetTitle === 'File format') {
-        const facetKeys = Object.keys(facetObject);
-        facetKeys.forEach((key) => {
-            if ((key.indexOf('bigWig') === -1) && (key.indexOf('bigBed') === -1)) {
-                delete facetObject[key];
-            }
-        });
-    }
+    // if (facetTitle === 'File format') {
+    //     const facetKeys = Object.keys(facetObject);
+    //     facetKeys.forEach((key) => {
+    //         if ((key.indexOf('bigWig') === -1) && (key.indexOf('bigBed') === -1)) {
+    //             delete facetObject[key];
+    //         }
+    //     });
+    // }
     // Determine how many total files there are
     let objSum = 0;
     // Create object to keep track of selected filters
@@ -2129,7 +2129,11 @@ class FileGalleryRendererComponent extends React.Component {
         const outputType = {};
         const replicate = {};
         const mappingAssembly = {};
-        this.state.files.forEach((file) => {
+
+        let fileList = this.state.files;
+        fileList = fileList.filter(file => file.file_format === 'bigWig' || file.file_format === 'bigBed');
+        fileList = fileList.filter(file => ['released', 'in progress', 'archived'].indexOf(file.status) > -1);
+        fileList.forEach((file) => {
             // collect 'File type'
             if (fileType[file.file_type]) {
                 fileType[file.file_type] += 1;
