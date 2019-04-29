@@ -1782,21 +1782,45 @@ InclusionSelector.propTypes = {
 
 // Display facets for files
 const FileFacet = (props) => {
-    const { facetObject, facetTitle, filterFiles, facetKey } = props;
+    const { facetObject, facetTitle, filterFiles, facetKey, selectedFilters } = props;
+    // Only display 'bigBed' and 'bigWig' files
+    if (facetTitle === 'File format') {
+        const facetKeys = Object.keys(facetObject);
+        facetKeys.forEach((key) => {
+            if ((key.indexOf('bigWig') === -1) && (key.indexOf('bigBed') === -1)) {
+                delete facetObject[key];
+            }
+        });
+    }
+    // Determine how many total files there are
     let objSum = 0;
+    // Create object to keep track of selected filters
+    const selectedObj = {};
     Object.keys(facetObject).forEach((key) => {
         objSum += facetObject[key];
+        if (Object.keys(selectedFilters).length > 0) {
+            Object.keys(selectedFilters).forEach((filter) => {
+                if (selectedFilters[filter] === key) {
+                    selectedObj[key] = 'selected';
+                }
+            });
+        }
     });
+    // Sort results
+    const sortedKeys = Object.keys(facetObject).sort((a, b) => (facetObject[b] - facetObject[a]));
+
     return (
         <div className="facet">
             <h5>{facetTitle}</h5>
-            {Object.keys(facetObject).map(item =>
-                <div className="facet-term__item" onClick={() => filterFiles(item, facetKey)} key={item}>
-                    <div className="facet-term__text">
-                        <span>{item}</span>
+            {sortedKeys.map(item =>
+                <div className={`facet-term${selectedObj[item] ? ' selected' : ''}`} onClick={() => filterFiles(item, facetKey)} key={item}>
+                    <div className="facet-term__item">
+                        <div className="facet-term__text">
+                            <span>{item}</span>
+                        </div>
+                        <div className="facet-term__count">{facetObject[item]}</div>
+                        <div className="facet-term__bar" style={{ width: `${Math.ceil((facetObject[item] / objSum) * 100)}%` }} />
                     </div>
-                    <div className="facet-term__count">{facetObject[item]}</div>
-                    <div className="facet-term__bar" style={{ width: `${Math.ceil((facetObject[item] / objSum) * 100)}%` }} />
                 </div>
             )}
         </div>
@@ -1808,6 +1832,7 @@ FileFacet.propTypes = {
     facetTitle: PropTypes.string.isRequired,
     filterFiles: PropTypes.func.isRequired,
     facetKey: PropTypes.string.isRequired,
+    selectedFilters: PropTypes.object.isRequired,
 };
 
 // Function to render the file gallery, and it gets called after the file search results (for files associated with
@@ -2074,9 +2099,13 @@ class FileGalleryRendererComponent extends React.Component {
 
     filterFiles(value, facet) {
         if (Object.keys(this.state.fileFilters).length > 0) {
-            const appendedFilter = this.state.fileFilters;
-            appendedFilter[facet] = value;
-            this.setState({ fileFilters: appendedFilter });
+            const currentFilters = this.state.fileFilters;
+            if (this.state.fileFilters[facet]) {
+                delete currentFilters[facet];
+            } else {
+                currentFilters[facet] = value;
+            }
+            this.setState({ fileFilters: currentFilters });
         } else {
             this.setState({ fileFilters: { [facet]: value } });
         }
@@ -2199,10 +2228,10 @@ class FileGalleryRendererComponent extends React.Component {
                                 <span> Clear all filters</span>
                             </button>
                         : null }
-                        <FileFacet facetTitle={'File format'} facetObject={fileType} filterFiles={this.filterFiles} facetKey={'file_type'} />
-                        <FileFacet facetTitle={'Output type'} facetObject={outputType} filterFiles={this.filterFiles} facetKey={'output_type'} />
-                        <FileFacet facetTitle={'Replicates'} facetObject={replicate} filterFiles={this.filterFiles} facetKey={'biological_replicates'} />
-                        <FileFacet facetTitle={'Mapping assembly'} facetObject={mappingAssembly} filterFiles={this.filterFiles} facetKey={'assembly'} />
+                        <FileFacet facetTitle={'File format'} facetObject={fileType} filterFiles={this.filterFiles} facetKey={'file_type'} selectedFilters={this.state.fileFilters} />
+                        <FileFacet facetTitle={'Output type'} facetObject={outputType} filterFiles={this.filterFiles} facetKey={'output_type'} selectedFilters={this.state.fileFilters} />
+                        <FileFacet facetTitle={'Replicates'} facetObject={replicate} filterFiles={this.filterFiles} facetKey={'biological_replicates'} selectedFilters={this.state.fileFilters} />
+                        <FileFacet facetTitle={'Mapping assembly'} facetObject={mappingAssembly} filterFiles={this.filterFiles} facetKey={'assembly'} selectedFilters={this.state.fileFilters} />
                     </div>
 
                     {!hideGraph ?
