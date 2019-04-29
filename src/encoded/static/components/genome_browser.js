@@ -338,8 +338,10 @@ class GenomeBrowser extends React.Component {
         if (this.props.expanded !== prevProps.expanded) {
             setTimeout(this.drawTracksResized, 1000);
         }
-        if (this.props !== prevProps && this.state.files) {
-            const tracks = this.props.files.map((file) => {
+        if (this.props !== prevProps && this.props.files) {
+            console.log("props have changed and we must recompute things");
+            const newFiles = [...pinnedFiles, ...this.props.files];
+            const tracks = newFiles.map((file) => {
                 if (file.name) {
                     const trackObj = {};
                     trackObj.name = file.name;
@@ -368,10 +370,13 @@ class GenomeBrowser extends React.Component {
             console.log(tracks);
 
             this.setState({ trackList: tracks }, () => {
+                console.log(this.chartdisplay);
                 if (this.chartdisplay) {
+                    console.log("setting client width");
                     this.setState({
                         width: this.chartdisplay.clientWidth,
                     }, () => {
+                        console.log("triggering draw tracks");
                         this.drawTracks(this.chartdisplay);
                     });
                 }
@@ -390,6 +395,7 @@ class GenomeBrowser extends React.Component {
     }
 
     drawTracks(container) {
+        console.log("drawing tracks");
         const visualizer = new GenomeVisualizer({
             clampToTracks: true,
             panels: [{
