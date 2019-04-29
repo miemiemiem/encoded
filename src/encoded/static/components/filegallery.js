@@ -1873,7 +1873,6 @@ class FileGalleryRendererComponent extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, prevContext) {
-        console.log('component did update');
         this.updateFiles(!!(prevContext.session && prevContext.session['auth.userid']));
     }
 
@@ -1923,7 +1922,6 @@ class FileGalleryRendererComponent extends React.Component {
      * combined files so we can choose a visualization browser.
      */
     updateFiles(prevLoggedIn) {
-        console.log('updating files');
         const { context, data } = this.props;
         const { session } = this.context;
         const loggedIn = !!(session && session['auth.userid']);
@@ -1965,8 +1963,6 @@ class FileGalleryRendererComponent extends React.Component {
             }
 
             if (filteredFiles.length !== this.state.files.length) {
-                console.log('setting the files');
-                console.log(filteredFiles);
                 this.setState({ files: filteredFiles });
                 // From the new set of files, calculate the currently selected assembly and annotation to display in
                 // the graph and tables.

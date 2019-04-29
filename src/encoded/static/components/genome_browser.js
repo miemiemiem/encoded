@@ -263,11 +263,7 @@ const dummyFiles = [
 ];
 
 const filesToTracks = (files, domain) => {
-    console.log('here is what we are getting from component');
-    console.log(files);
-    console.log(domain);
     const tracks = files.map((file) => {
-        console.log(file.href);
         if (file.name) {
             const trackObj = {};
             trackObj.name = file.name;
@@ -291,8 +287,6 @@ const filesToTracks = (files, domain) => {
         trackObj.heightPx = 50;
         return trackObj;
     });
-    console.log('these are the tracks');
-    console.log(tracks);
     return tracks;
 };
 
@@ -321,12 +315,6 @@ class GenomeBrowser extends React.Component {
             domain = domainName;
             files = [...pinnedFiles, ...dummyFiles];
         }
-        
-        console.log('DOMAIN');
-        console.log(domain);
-
-        console.log('these are the files');
-        console.log(files);
 
         // this.setState({ domain });
         const tracks = filesToTracks(files, domain);
@@ -342,7 +330,6 @@ class GenomeBrowser extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log('genome browser component did update');
         // If the parent container changed size, we need to update the browser width
         if (this.props.expanded !== prevProps.expanded) {
             console.log('parent container changed size so update browser width');
@@ -354,30 +341,20 @@ class GenomeBrowser extends React.Component {
             let newFiles = [];
             let domain = `${window.location.protocol}//${window.location.hostname}`;
             if (domain.includes('localhost')) {
-                console.log('local files');
                 domain = domainName;
                 newFiles = [...pinnedFiles, ...dummyFiles];
             } else {
-                console.log('if we get here there is an ISSUE');
                 let propsFiles = this.props.files;
                 propsFiles = propsFiles.filter(file => file.file_format === 'bigWig' || file.file_format === 'bigBed');
                 propsFiles = propsFiles.filter(file => ['released', 'in progress', 'archived'].indexOf(file.status) > -1);
                 newFiles = [...pinnedFiles, ...propsFiles];
             }
-
-            console.log('we are passing newFiles to filesToTracks');
-            console.log(newFiles);
             const tracks = filesToTracks(newFiles, domain);
-            console.log(tracks);
-
             this.setState({ trackList: tracks }, () => {
-                console.log(this.chartdisplay);
                 if (this.chartdisplay) {
-                    console.log('setting client width');
                     this.setState({
                         width: this.chartdisplay.clientWidth,
                     }, () => {
-                        console.log('triggering draw tracks');
                         this.drawTracks(this.chartdisplay);
                     });
                 }
@@ -396,7 +373,6 @@ class GenomeBrowser extends React.Component {
     }
 
     drawTracks(container) {
-        console.log("drawing tracks");
         const visualizer = new GenomeVisualizer({
             clampToTracks: true,
             panels: [{
