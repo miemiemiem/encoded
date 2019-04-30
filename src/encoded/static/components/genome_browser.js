@@ -375,6 +375,7 @@ class GenomeBrowser extends React.Component {
     drawTracks(container) {
         const visualizer = new GenomeVisualizer({
             clampToTracks: true,
+            removableTracks: false,
             panels: [{
                 location: { contig: 'chr1', x0: 0, x1: 59e6 },
             }],
