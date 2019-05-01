@@ -21,6 +21,10 @@ const PAGE_ELEMENT_COUNT = 25;
 /** File facet fields to display */
 const displayedFacetFields = [
     'file_type',
+    'assembly',
+    'output_type',
+    'lab.title',
+    'status',
 ];
 /** File facet field to use to count the total file count */
 const displayedFacetCountingField = 'file_type';
