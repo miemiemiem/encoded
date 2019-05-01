@@ -1852,6 +1852,16 @@ def test_audit_experiment_micro_rna_standards(
         assert any(
             error['category'] == audit for error in errors
         )
+    # Test that audits are not triggered when patching qc to safe values
+    testapp.patch_json(spearman_correlation_quality_metric['@id'], {'Spearman correlation': 0.99})
+    testapp.patch_json(micro_rna_quantification_quality_metric_1_2['@id'], {'expressed_mirnas': 1000000})
+    testapp.patch_json(micro_rna_mapping_quality_metric_2_1['@id'], {'aligned_reads': 10000000})
+    res = testapp.get(base_experiment['@id'] + '@@index-data')
+    errors = collect_audit_errors(res)
+    for audit in expected_audits:
+        assert not any(
+            error['category'] == audit for error in errors
+        )
 
 
 def test_audit_experiment_long_rna_standards_encode2(testapp,
