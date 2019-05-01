@@ -88,7 +88,7 @@ apt_sources:
     /qiNGs/TKy2/Ujqp/affmIMoMXSozKmga81JSwkADO1JMgUy6dApXz9kP4EE3g==
     =CLGF
     -----END PGP PUBLIC KEY BLOCK-----
-- source: "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main"
+- source: "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main"
   key: |
     -----BEGIN PGP PUBLIC KEY BLOCK-----
 
