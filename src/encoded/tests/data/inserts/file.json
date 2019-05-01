@@ -2438,6 +2438,7 @@
         ],
         "file_format": "bam",
         "file_size": 398856,
+        "genome_annotation": "V24",
         "lab": "/labs/encode-processing-pipeline/",
         "md5sum": "22be74b6e11555393507f4ebfa65d78c",
         "output_type": "alignments",
@@ -2459,6 +2460,7 @@
             "/files/ENCFF002ISO/"
         ],
         "file_format": "bam",
+        "genome_annotation": "V24",
         "lab": "/labs/encode-processing-pipeline/",
         "md5sum": "94be74b6e11515393434f4ebfa66d78d",
         "output_type": "alignments",
@@ -2480,6 +2482,7 @@
             "/files/ENCFF003ISO/"
         ],
         "file_format": "tsv",
+        "genome_annotation": "V24",
         "lab": "/labs/encode-processing-pipeline/",
         "md5sum": "12ab74b6e11515392222f4ebfa66d78d",
         "output_type": "gene quantifications",
@@ -2501,6 +2504,7 @@
             "/files/ENCFF004ISO/"
         ],
         "file_format": "tsv",
+        "genome_annotation": "V24",
         "lab": "/labs/encode-processing-pipeline/",
         "md5sum": "94be74b6e11515394444f4ebfa66d78d",
         "output_type": "gene quantifications",
