@@ -2430,7 +2430,7 @@
     {
         "_test": "rep1 bam file for long read RNA-seq experiment",
         "accession": "ENCFF003ISO",
-        "assembly": "hg19",
+        "assembly": "GRCh38",
         "award": "U54HG006998",
         "dataset": "ENCSR751ISO",
         "derived_from": [
@@ -2438,11 +2438,12 @@
         ],
         "file_format": "bam",
         "file_size": 398856,
-        "lab": "/labs/robert-waterston/",
+        "lab": "/labs/encode-processing-pipeline/",
         "md5sum": "22be74b6e11555393507f4ebfa65d78c",
         "output_type": "alignments",
         "replicate": "3b427e79-556e-4125-8102-f6723471807e",
         "status": "released",
+        "step_run": "635ac7ff-7822-4f72-aad5-5d8b51b60d95",
         "submitted_by": "amet.fusce@est.fermentum",
         "submitted_file_name": "alabama.bam",
         "uuid": "3d668412-fb5c-4cf1-8d66-5ab02ac12c12"
@@ -2450,7 +2451,7 @@
     {
         "_test": "rep2 bam file for long read RNA-seq experiment",
         "accession": "ENCFF004ISO",
-        "assembly": "hg19",
+        "assembly": "GRCh38",
         "award": "U41HG006992",
         "dataset": "ENCSR751ISO",
         "date_created": "2013-04-18T16:46:18.670068+00:00",
@@ -2458,7 +2459,7 @@
             "/files/ENCFF002ISO/"
         ],
         "file_format": "bam",
-        "lab":"j-michael-cherry",
+        "lab": "/labs/encode-processing-pipeline/",
         "md5sum": "94be74b6e11515393434f4ebfa66d78d",
         "output_type": "alignments",
         "platform": "9ab7d195-c2d9-45ef-aed5-1d39ba77240b",
@@ -2471,7 +2472,7 @@
     {
         "_test": "rep1 quantifications for long read RNA-seq experiment",
         "accession": "ENCFF005ISO",
-        "assembly": "hg19",
+        "assembly": "GRCh38",
         "award": "U41HG006992",
         "dataset": "ENCSR751ISO",
         "date_created": "2013-04-18T16:46:18.670068+00:00",
@@ -2479,7 +2480,7 @@
             "/files/ENCFF003ISO/"
         ],
         "file_format": "tsv",
-        "lab":"j-michael-cherry",
+        "lab": "/labs/encode-processing-pipeline/",
         "md5sum": "12ab74b6e11515392222f4ebfa66d78d",
         "output_type": "gene quantifications",
         "platform": "9ab7d195-c2d9-45ef-aed5-1d39ba77240b",
@@ -2492,7 +2493,7 @@
     {
         "_test": "rep2 quantifications for long read RNA-seq experiment",
         "accession": "ENCFF006ISO",
-        "assembly": "hg19",
+        "assembly": "GRCh38",
         "award": "U41HG006992",
         "dataset": "ENCSR751ISO",
         "date_created": "2013-04-18T16:46:18.670068+00:00",
@@ -2500,7 +2501,7 @@
             "/files/ENCFF004ISO/"
         ],
         "file_format": "tsv",
-        "lab":"j-michael-cherry",
+        "lab": "/labs/encode-processing-pipeline/",
         "md5sum": "94be74b6e11515394444f4ebfa66d78d",
         "output_type": "gene quantifications",
         "platform": "9ab7d195-c2d9-45ef-aed5-1d39ba77240b",

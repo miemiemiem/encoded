@@ -24,13 +24,13 @@
         },
         "full_length_non_chimeric_read_count": {
             "title": "Full length non-chimeric read count",
-            "description": "Quantity of full-length reads not mapping chimerically of the genome",
+            "description": "Quantity of reads that are full-length and do not contain a chimeric adaptor arrangement.",
             "type": "integer",
             "minimum": 0
         },
         "mapping_rate": {
             "title": "Mapping rate",
-            "description": "Percentage of reads mapping to the genome",
+            "description": "Proportion of reads mapping to the genome",
             "type":  "number",
             "minimum": 0,
             "maximum": 1
