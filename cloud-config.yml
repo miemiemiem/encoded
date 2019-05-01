@@ -88,6 +88,85 @@ apt_sources:
     /qiNGs/TKy2/Ujqp/affmIMoMXSozKmga81JSwkADO1JMgUy6dApXz9kP4EE3g==
     =CLGF
     -----END PGP PUBLIC KEY BLOCK-----
+- source: "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main"
+  key: |
+    -----BEGIN PGP PUBLIC KEY BLOCK-----
+
+    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
+    =DA1T
+    -----END PGP PUBLIC KEY BLOCK-----
 bootcmd:
 - set -ex
 - cloud-init-per once accepted-oracle-license-v1-1 echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections
@@ -118,7 +197,8 @@ packages:
 - lzop
 - nodejs
 - ntp
-- postgresql-9.3
+- postgresql
+- postgresql-contrib
 - pv
 - python2.7-dev
 - python3.4-dev
@@ -139,177 +219,177 @@ output:
 runcmd:
 - sudo -u ubuntu mv /home/ubuntu/.ssh/authorized_keys /home/ubuntu/.ssh/authorized_keys2
 - sudo -u ubuntu aws s3 cp --region=us-west-2 %(S3_AUTH_KEYS)s /home/ubuntu/.ssh/authorized_keys
-# Manually install java
-- sudo -u ubuntu aws s3 cp --region=us-west-2 --recursive s3://encoded-conf-prod/.aws ~ubuntu/.aws
-- sudo mkdir -p /usr/lib/jvm
-- sudo chmod 777 /usr/lib/jvm
-- sudo tar -xzvf /home/ubuntu/.aws/jdk-8u211-linux-x64.tar.gz --directory /usr/lib/jvm/
-- sudo -u ubuntu rm -r /home/ubuntu/.aws
-- sudo chmod 755 /usr/lib/jvm
-- sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk1.8.0_211/bin/java 100
-# Manually install java
-- cp /etc/redis/redis.conf /etc/redis/redis.conf.default
-- sed -i -e 's/port 6379/port %(REDIS_PORT)s/' /etc/redis/redis.conf
-- sed -i -e 's/bind 127\.0\.0\.1/bind 0\.0\.0\.0/' /etc/redis/redis.conf
-- service redis-server restart
-- MEMGIGS=$(awk '/MemTotal/{printf "%%.0f", $2 / 1024**2}' /proc/meminfo)
-- if [ "$MEMGIGS" -gt 32 ]
-- then
--    echo "-Xms8g" >> /etc/elasticsearch/jvm.options
--    echo "-Xmx8g" >> /etc/elasticsearch/jvm.options
-- elif [ "$MEMGIGS" -gt 12 ]
-- then
--    echo "-Xms4g" >> /etc/elasticsearch/jvm.options
--    echo "-Xmx4g" >> /etc/elasticsearch/jvm.options
-- else
--    echo "-Xms2g" >> /etc/elasticsearch/jvm.options
--    echo "-Xmx2g" >> /etc/elasticsearch/jvm.options
--    sysctl "vm.swappiness=1"
--    swapon /swapfile
-- fi
-- set -ex
-- update-rc.d elasticsearch defaults
-- service elasticsearch restart
-- chown postgres:postgres /etc/postgresql/9.3/main/*.conf
-- echo "include 'custom.conf'" >> /etc/postgresql/9.3/main/postgresql.conf
-- if test "%(ROLE)s" != "candidate"
-- then
--   echo "standby_mode = off" >> /etc/postgresql/9.3/main/recovery.conf
--   echo "include 'demo.conf'" >> /etc/postgresql/9.3/main/postgresql.conf
-- fi
-- sudo -u postgres createuser encoded
-- sudo -u postgres createdb --owner=encoded encoded
-- mkdir /srv/encoded
-- chown encoded:encoded /srv/encoded
-- cd /srv/encoded
-- sudo -u encoded git clone --no-checkout %(GIT_REPO)s .
-- sudo -u encoded git checkout %(COMMIT)s
-- mkdir /opt/cloudwatchmon
-- chown build:build /opt/cloudwatchmon
-- sudo -u build virtualenv --python=python2.7 /opt/cloudwatchmon
-- sudo -u build /opt/cloudwatchmon/bin/pip install -r cloudwatchmon-requirements.txt
-- mkdir /opt/wal-e
-- chown postgres:postgres /opt/wal-e
-- sudo -u postgres virtualenv --python=python2.7 /opt/wal-e
-- sudo -u postgres /opt/wal-e/bin/pip install -r wal-e-requirements.txt
-- /etc/init.d/postgresql stop
-- sudo -u postgres /opt/wal-e/bin/wal-e --aws-instance-profile --s3-prefix="$(cat /etc/postgresql/9.3/main/wale_s3_prefix)" backup-fetch /var/lib/postgresql/9.3/main LATEST
-- sudo -u postgres ln -s /etc/postgresql/9.3/main/recovery.conf /var/lib/postgresql/9.3/main/
-- /etc/init.d/postgresql start
-- sudo pip3 install -U zc.buildout setuptools redis
-- sudo -u encoded buildout bootstrap
-- sudo -u encoded LANG=en_US.UTF-8 bin/buildout -c %(ROLE)s.cfg buildout:es-ip=%(ES_IP)s buildout:es-port=%(ES_PORT)s
-- sudo -u encoded bin/aws s3 cp --recursive s3://encoded-conf-prod/.aws .aws
-- until sudo -u postgres psql postgres -c ""; do sleep 10; done
-- sudo -u encoded sh -c 'cat /dev/urandom | head -c 256 | base64 > session-secret.b64'
-- sudo -u encoded bin/create-mapping production.ini --app-name app
-- sudo -u encoded bin/index-annotations production.ini --app-name app
-- if test "%(REGION_INDEX)s" = "False"
-- then
--    sudo -u encoded cp /srv/encoded/etc/encoded-apache.conf /srv/encoded/etc/encoded-apache.conf.original
--    sudo -u encoded sh -c "grep -v encoded\-regionindexer /srv/encoded/etc/encoded-apache.conf.original | grep -v _region > /srv/encoded/etc/encoded-apache.conf"
--    sudo -u encoded cp /srv/encoded/base.ini /srv/encoded/base.ini.original
--    sudo -u encoded sh -c "sed 's/vis_indexer, region_indexer/vis_indexer/' /srv/encoded/base.ini.original > /srv/encoded/base.ini"
-- fi
-- ln -s /srv/encoded/etc/encoded-apache.conf /etc/apache2/sites-available/encoded.conf
-- ln -s /srv/encoded/etc/logging-apache.conf /etc/apache2/conf-available/logging.conf
-- a2enmod headers
-- a2enmod proxy_http
-- a2enmod rewrite
-- a2enmod ssl
-- a2ensite encoded.conf
-- a2dissite 000-default
-- a2enconf logging
-- a2disconf charset
-- a2disconf security
-- a2disconf localized-error-pages
-- a2disconf other-vhosts-access-log
-- a2disconf serve-cgi-bin
-- if test "%(ROLE)s" = "demo"
-- then
--   sudo -i -u encoded bin/batchupgrade production.ini --app-name app
-- fi
-- sudo sed -i -e 's/inet_interfaces = all/inet_interfaces = loopback-only/g' /etc/postfix/main.cf
-- PUBLIC_DNS_NAME="$(curl http://169.254.169.254/latest/meta-data/public-hostname)"
-- sudo sed -i "/myhostname/c\myhostname = $PUBLIC_DNS_NAME" /etc/postfix/main.cf
-- sudo echo "127.0.0.0 $PUBLIC_DNS_NAME" | sudo tee --append /etc/hosts
-- sudo mv /etc/mailname /etc/mailname.OLD
-- sudo echo "$PUBLIC_DNS_NAME" | sudo tee --append /etc/mailname
-- sudo service postfix restart
-users:
-- default
-- name: build
-  gecos: Build user
-  inactive: true
-  system: true
-- name: encoded
-  gecos: ENCODE Metadata Database daemon user
-  inactive: true
-  system: true
-  homedir: /srv/encoded
-write_files:
-- path: /etc/apt/apt.conf.d/20auto-upgrades
-  content: |
-    APT::Periodic::Update-Package-Lists "1";
-    APT::Periodic::Unattended-Upgrade "1";
-- path: /etc/apt/apt.conf.d/50unattended-upgrades
-  content: |
-    Unattended-Upgrade::Allowed-Origins {
-        "${distro_id} ${distro_codename}-security";
-    };
-    Unattended-Upgrade::Mail "encode-devops@lists.stanford.edu";
-    Unattended-Upgrade::Automatic-Reboot "false";
-- path: /etc/cron.d/cloudwatchmon
-  content: |
-    */5 * * * * nobody /opt/cloudwatchmon/bin/mon-put-instance-stats.py --mem-util --swap-util --disk-space-util --disk-path=/ --from-cron
-- path: /etc/elasticsearch/elasticsearch.yml
-  content: |
-    http.port: 9201
-    thread_pool:
-        search:
-            size: 100
-            queue_size: 2000
-        index:
-            queue_size: 400
-    indices.query.bool.max_clause_count: 8192
-- path: /etc/elasticsearch/jvm.options
-  content: |
-    -XX:+UseConcMarkSweepGC
-    -XX:CMSInitiatingOccupancyFraction=75
-    -XX:+UseCMSInitiatingOccupancyOnly
-    -XX:+DisableExplicitGC
-    -XX:+AlwaysPreTouch
-    -server
-    -Xss1m
-    -Djava.awt.headless=true
-    -Dfile.encoding=UTF-8
-    -Djna.nosys=true
-    -Djdk.io.permissionsUseCanonicalPath=true
-    -Dio.netty.noUnsafe=true
-    -Dio.netty.noKeySetOptimization=true
-    -Dio.netty.recycler.maxCapacityPerThread=0
-    -Dlog4j.shutdownHookEnabled=false
-    -Dlog4j2.disable.jmx=true
-    -Dlog4j.skipJansi=true
-    -XX:+HeapDumpOnOutOfMemoryError
-- path: /etc/postgresql/9.3/main/custom.conf
-  content: |
-    hot_standby = on
-    max_standby_archive_delay = -1
-    wal_level = hot_standby
-    archive_mode = on
-    archive_timeout = 60
-    checkpoint_timeout = 1h
-- path: /etc/postgresql/9.3/main/demo.conf
-  content: |
-    archive_mode = off
-- path: /etc/postgresql/9.3/main/master.conf
-  content: |
-    archive_command = '/opt/wal-e/bin/envfile --config ~postgres/.aws/credentials --section default --upper -- /opt/wal-e/bin/wal-e --s3-prefix="$(cat /etc/postgresql/9.3/main/wale_s3_prefix)" wal-push "%%p"'
-- path: /etc/postgresql/9.3/main/recovery.conf
-  content: |
-    recovery_target_timeline = 'latest'
-    restore_command = '/opt/wal-e/bin/wal-e --aws-instance-profile --s3-prefix="$(cat /etc/postgresql/9.3/main/wale_s3_prefix)" wal-fetch "%%f" "%%p"'
-    standby_mode = on
-- path: /etc/postgresql/9.3/main/wale_s3_prefix
-  content: "%(WALE_S3_PREFIX)s"
+  # # Manually install java
+  # - sudo -u ubuntu aws s3 cp --region=us-west-2 --recursive s3://encoded-conf-prod/.aws ~ubuntu/.aws
+  # - sudo mkdir -p /usr/lib/jvm
+  # - sudo chmod 777 /usr/lib/jvm
+  # - sudo tar -xzvf /home/ubuntu/.aws/jdk-8u211-linux-x64.tar.gz --directory /usr/lib/jvm/
+  # - sudo -u ubuntu rm -r /home/ubuntu/.aws
+  # - sudo chmod 755 /usr/lib/jvm
+  # - sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk1.8.0_211/bin/java 100
+  # # Manually install java
+  # - cp /etc/redis/redis.conf /etc/redis/redis.conf.default
+  # - sed -i -e 's/port 6379/port %(REDIS_PORT)s/' /etc/redis/redis.conf
+  # - sed -i -e 's/bind 127\.0\.0\.1/bind 0\.0\.0\.0/' /etc/redis/redis.conf
+  # - service redis-server restart
+  # - MEMGIGS=$(awk '/MemTotal/{printf "%%.0f", $2 / 1024**2}' /proc/meminfo)
+  # - if [ "$MEMGIGS" -gt 32 ]
+  # - then
+  # -    echo "-Xms8g" >> /etc/elasticsearch/jvm.options
+  # -    echo "-Xmx8g" >> /etc/elasticsearch/jvm.options
+  # - elif [ "$MEMGIGS" -gt 12 ]
+  # - then
+  # -    echo "-Xms4g" >> /etc/elasticsearch/jvm.options
+  # -    echo "-Xmx4g" >> /etc/elasticsearch/jvm.options
+  # - else
+  # -    echo "-Xms2g" >> /etc/elasticsearch/jvm.options
+  # -    echo "-Xmx2g" >> /etc/elasticsearch/jvm.options
+  # -    sysctl "vm.swappiness=1"
+  # -    swapon /swapfile
+  # - fi
+  # - set -ex
+  # - update-rc.d elasticsearch defaults
+  # - service elasticsearch restart
+  # - chown postgres:postgres /etc/postgresql/9.3/main/*.conf
+  # - echo "include 'custom.conf'" >> /etc/postgresql/9.3/main/postgresql.conf
+  # - if test "%(ROLE)s" != "candidate"
+  # - then
+  # -   echo "standby_mode = off" >> /etc/postgresql/9.3/main/recovery.conf
+  # -   echo "include 'demo.conf'" >> /etc/postgresql/9.3/main/postgresql.conf
+  # - fi
+  # - sudo -u postgres createuser encoded
+  # - sudo -u postgres createdb --owner=encoded encoded
+  # - mkdir /srv/encoded
+  # - chown encoded:encoded /srv/encoded
+  # - cd /srv/encoded
+  # - sudo -u encoded git clone --no-checkout %(GIT_REPO)s .
+  # - sudo -u encoded git checkout %(COMMIT)s
+  # - mkdir /opt/cloudwatchmon
+  # - chown build:build /opt/cloudwatchmon
+  # - sudo -u build virtualenv --python=python2.7 /opt/cloudwatchmon
+  # - sudo -u build /opt/cloudwatchmon/bin/pip install -r cloudwatchmon-requirements.txt
+  # - mkdir /opt/wal-e
+  # - chown postgres:postgres /opt/wal-e
+  # - sudo -u postgres virtualenv --python=python2.7 /opt/wal-e
+  # - sudo -u postgres /opt/wal-e/bin/pip install -r wal-e-requirements.txt
+  # - /etc/init.d/postgresql stop
+  # - sudo -u postgres /opt/wal-e/bin/wal-e --aws-instance-profile --s3-prefix="$(cat /etc/postgresql/9.3/main/wale_s3_prefix)" backup-fetch /var/lib/postgresql/9.3/main LATEST
+  # - sudo -u postgres ln -s /etc/postgresql/9.3/main/recovery.conf /var/lib/postgresql/9.3/main/
+  # - /etc/init.d/postgresql start
+  # - sudo pip3 install -U zc.buildout setuptools redis
+  # - sudo -u encoded buildout bootstrap
+  # - sudo -u encoded LANG=en_US.UTF-8 bin/buildout -c %(ROLE)s.cfg buildout:es-ip=%(ES_IP)s buildout:es-port=%(ES_PORT)s
+  # - sudo -u encoded bin/aws s3 cp --recursive s3://encoded-conf-prod/.aws .aws
+  # - until sudo -u postgres psql postgres -c ""; do sleep 10; done
+  # - sudo -u encoded sh -c 'cat /dev/urandom | head -c 256 | base64 > session-secret.b64'
+  # - sudo -u encoded bin/create-mapping production.ini --app-name app
+  # - sudo -u encoded bin/index-annotations production.ini --app-name app
+  # - if test "%(REGION_INDEX)s" = "False"
+  # - then
+  # -    sudo -u encoded cp /srv/encoded/etc/encoded-apache.conf /srv/encoded/etc/encoded-apache.conf.original
+  # -    sudo -u encoded sh -c "grep -v encoded\-regionindexer /srv/encoded/etc/encoded-apache.conf.original | grep -v _region > /srv/encoded/etc/encoded-apache.conf"
+  # -    sudo -u encoded cp /srv/encoded/base.ini /srv/encoded/base.ini.original
+  # -    sudo -u encoded sh -c "sed 's/vis_indexer, region_indexer/vis_indexer/' /srv/encoded/base.ini.original > /srv/encoded/base.ini"
+  # - fi
+  # - ln -s /srv/encoded/etc/encoded-apache.conf /etc/apache2/sites-available/encoded.conf
+  # - ln -s /srv/encoded/etc/logging-apache.conf /etc/apache2/conf-available/logging.conf
+  # - a2enmod headers
+  # - a2enmod proxy_http
+  # - a2enmod rewrite
+  # - a2enmod ssl
+  # - a2ensite encoded.conf
+  # - a2dissite 000-default
+  # - a2enconf logging
+  # - a2disconf charset
+  # - a2disconf security
+  # - a2disconf localized-error-pages
+  # - a2disconf other-vhosts-access-log
+  # - a2disconf serve-cgi-bin
+  # - if test "%(ROLE)s" = "demo"
+  # - then
+  # -   sudo -i -u encoded bin/batchupgrade production.ini --app-name app
+  # - fi
+  # - sudo sed -i -e 's/inet_interfaces = all/inet_interfaces = loopback-only/g' /etc/postfix/main.cf
+  # - PUBLIC_DNS_NAME="$(curl http://169.254.169.254/latest/meta-data/public-hostname)"
+  # - sudo sed -i "/myhostname/c\myhostname = $PUBLIC_DNS_NAME" /etc/postfix/main.cf
+  # - sudo echo "127.0.0.0 $PUBLIC_DNS_NAME" | sudo tee --append /etc/hosts
+  # - sudo mv /etc/mailname /etc/mailname.OLD
+  # - sudo echo "$PUBLIC_DNS_NAME" | sudo tee --append /etc/mailname
+  # - sudo service postfix restart
+  # users:
+  # - default
+  # - name: build
+  #   gecos: Build user
+  #   inactive: true
+  #   system: true
+  # - name: encoded
+  #   gecos: ENCODE Metadata Database daemon user
+  #   inactive: true
+  #   system: true
+  #   homedir: /srv/encoded
+  # write_files:
+  # - path: /etc/apt/apt.conf.d/20auto-upgrades
+  #   content: |
+  #     APT::Periodic::Update-Package-Lists "1";
+  #     APT::Periodic::Unattended-Upgrade "1";
+  # - path: /etc/apt/apt.conf.d/50unattended-upgrades
+  #   content: |
+  #     Unattended-Upgrade::Allowed-Origins {
+  #         "${distro_id} ${distro_codename}-security";
+  #     };
+  #     Unattended-Upgrade::Mail "encode-devops@lists.stanford.edu";
+  #     Unattended-Upgrade::Automatic-Reboot "false";
+  # - path: /etc/cron.d/cloudwatchmon
+  #   content: |
+  #     */5 * * * * nobody /opt/cloudwatchmon/bin/mon-put-instance-stats.py --mem-util --swap-util --disk-space-util --disk-path=/ --from-cron
+  # - path: /etc/elasticsearch/elasticsearch.yml
+  #   content: |
+  #     http.port: 9201
+  #     thread_pool:
+  #         search:
+  #             size: 100
+  #             queue_size: 2000
+  #         index:
+  #             queue_size: 400
+  #     indices.query.bool.max_clause_count: 8192
+  # - path: /etc/elasticsearch/jvm.options
+  #   content: |
+  #     -XX:+UseConcMarkSweepGC
+  #     -XX:CMSInitiatingOccupancyFraction=75
+  #     -XX:+UseCMSInitiatingOccupancyOnly
+  #     -XX:+DisableExplicitGC
+  #     -XX:+AlwaysPreTouch
+  #     -server
+  #     -Xss1m
+  #     -Djava.awt.headless=true
+  #     -Dfile.encoding=UTF-8
+  #     -Djna.nosys=true
+  #     -Djdk.io.permissionsUseCanonicalPath=true
+  #     -Dio.netty.noUnsafe=true
+  #     -Dio.netty.noKeySetOptimization=true
+  #     -Dio.netty.recycler.maxCapacityPerThread=0
+  #     -Dlog4j.shutdownHookEnabled=false
+  #     -Dlog4j2.disable.jmx=true
+  #     -Dlog4j.skipJansi=true
+  #     -XX:+HeapDumpOnOutOfMemoryError
+  #     # - path: /etc/postgresql/9.3/main/custom.conf
+  #     #   content: |
+  #     #     hot_standby = on
+  #     #     max_standby_archive_delay = -1
+  #     #     wal_level = hot_standby
+  #     #     archive_mode = on
+  #     #     archive_timeout = 60
+  #     #     checkpoint_timeout = 1h
+  #     # - path: /etc/postgresql/9.3/main/demo.conf
+  #     #   content: |
+  #     #     archive_mode = off
+  #     # - path: /etc/postgresql/9.3/main/master.conf
+  #     #   content: |
+  #     #     archive_command = '/opt/wal-e/bin/envfile --config ~postgres/.aws/credentials --section default --upper -- /opt/wal-e/bin/wal-e --s3-prefix="$(cat /etc/postgresql/9.3/main/wale_s3_prefix)" wal-push "%%p"'
+  #     # - path: /etc/postgresql/9.3/main/recovery.conf
+  #     #   content: |
+  #     #     recovery_target_timeline = 'latest'
+  #     #     restore_command = '/opt/wal-e/bin/wal-e --aws-instance-profile --s3-prefix="$(cat /etc/postgresql/9.3/main/wale_s3_prefix)" wal-fetch "%%f" "%%p"'
+  #     #     standby_mode = on
+  #     # - path: /etc/postgresql/9.3/main/wale_s3_prefix
+  #     #   content: "%(WALE_S3_PREFIX)s"
