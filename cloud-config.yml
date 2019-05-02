@@ -202,6 +202,7 @@ packages:
 - pv
 - python2.7-dev
 - python3.4-dev
+- python3.4-venv
 - python3-pip
 - python-software-properties
 - python-virtualenv
@@ -219,3 +220,53 @@ output:
 runcmd:
 - sudo -u ubuntu mv /home/ubuntu/.ssh/authorized_keys /home/ubuntu/.ssh/authorized_keys2
 - sudo -u ubuntu aws s3 cp --region=us-west-2 %(S3_AUTH_KEYS)s /home/ubuntu/.ssh/authorized_keys
+# python
+# Java
+# Elasticsearch
+# Postgres
+- chown postgres:postgres /etc/postgresql/11/main/*.conf
+- echo "include 'custom.conf'" >> /etc/postgresql/11/main/postgresql.conf
+- if test "%(ROLE)s" != "candidate"
+- then
+-   echo "standby_mode = off" >> /etc/postgresql/11/main/recovery.conf
+-   echo "include 'demo.conf'" >> /etc/postgresql/11/main/postgresql.conf
+- fi
+- sudo -u postgres createuser encoded
+- sudo -u postgres createdb --owner=encoded encoded
+- sudo -u ubuntu /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile stop
+# Wal-E - Install
+- mkdir /opt/pg-wal-e
+- chown -R postgres:postgres /opt/pg-wal-e
+- sudo -u postgres python3 -m venv /opt/pg-wal-e/.py343-wal-e
+- sudo -u postgres /opt/pg-wal-e/.py343-wal-e/bin/pip install pip setuptools --upgrade
+- sudo -u postgres git clone %(GIT_REPO)s /opt/pg-wal-e/pg-encoded
+- sudo -u postgres .py343-wale/bin/pip install -r /opt/pg-wal-e/wal-e/wal-e-requirements.txt
+- sudo -u postgres git clone https://github.com/wal-e/wal-e.git /opt/pg-wal-e/wal-e
+- sudo -u postgres .py343-wale/bin/pip install -e /opt/pg-wal-e/wal-e
+- sudo -u postgres /opt/wal-e/bin/wal-e --aws-instance-profile --s3-prefix="$(cat /etc/postgresql/11/main/wale_s3_prefix)" backup-fetch /var/lib/postgresql/9.3/main LATEST
+- sudo -u postgres ln -s /etc/postgresql/11/main/recovery.conf /var/lib/postgresql/9.3/main/
+- sudo -u ubuntu /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start
+# Encoded
+
+
+- path: /etc/postgresql/11/main/custom.conf
+  content: |
+    hot_standby = on
+    max_standby_archive_delay = -1
+    wal_level = hot_standby
+    archive_mode = on
+    archive_timeout = 60
+    checkpoint_timeout = 1h
+- path: /etc/postgresql/9.3/main/demo.conf
+  content: |
+    archive_mode = off
+- path: /etc/postgresql/11/main/master.conf
+  content: |
+    archive_command = '/opt/wal-e/bin/envfile --config ~postgres/.aws/credentials --section default --upper -- /opt/wal-e/bin/wal-e --s3-prefix="$(cat /etc/postgresql/11/main/wale_s3_prefix)" wal-push "%%p"'
+- path: /etc/postgresql/11/main/recovery.conf
+  content: |
+    recovery_target_timeline = 'latest'
+    restore_command = '/opt/wal-e/bin/wal-e --aws-instance-profile --s3-prefix="$(cat /etc/postgresql/11/main/wale_s3_prefix)" wal-fetch "%%f" "%%p"'
+    standby_mode = on
+- path: /etc/postgresql/11/main/wale_s3_prefix
+  content: "%(WALE_S3_PREFIX)s"
