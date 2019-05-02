@@ -233,8 +233,8 @@ runcmd:
 - fi
 - sudo -u postgres createuser encoded
 - sudo -u postgres createdb --owner=encoded encoded
-- sudo -u ubuntu /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile stop
 # Wal-E - Install
+- sudo -u ubuntu /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile stop
 - mkdir /opt/pg-wal-e
 - chown -R postgres:postgres /opt/pg-wal-e
 - sudo -u postgres python3 -m venv /opt/pg-wal-e/.py343-wal-e
